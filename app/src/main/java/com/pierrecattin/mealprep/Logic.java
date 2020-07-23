@@ -15,23 +15,39 @@ public class Logic {
     }
 
     public void process(){
-        Ingredient[] ingredients =  new Ingredient[4];
+        Ingredient[] ingredients =  new Ingredient[10];
         ingredients[0] = new Ingredient("Pasta", "Carbs");
         ingredients[1] = new Ingredient("Broccoli", "Veggies");
         ingredients[2] = new Ingredient("Tofu", "Protein");
         ingredients[3] = new Ingredient("Rice", "Carbs");
-        ingredients[1].addStyle("Asian");
-        ingredients[1].addStyle("European");
+        ingredients[4] = new Ingredient("Soy sauce", "Sauce");
+        ingredients[5] = new Ingredient("Potatoes", "Carbs");
+        ingredients[6] = new Ingredient("Carrots", "Veggies");
+        ingredients[7] = new Ingredient("Pumpkin", "Veggies");
+        ingredients[8] = new Ingredient("Quorn", "Protein");
+        ingredients[9] = new Ingredient("Chickpeas", "Protein");
+
+        ingredients[0].addStyle("European");
         ingredients[2].addStyle("Asian");
+        ingredients[2].addStyle("Dough");
+        ingredients[4].addStyle("Asian");
+
+        //out.print(ingredients[0].toString());
 
         Meal myFirstMeal = new Meal();
-        int nbIngredients = myFirstMeal.getIngredients().size();
-        while (nbIngredients<2){
+        int maxTrial = 10000;
+        int trialCount = 0;
+        while (!myFirstMeal.allTypesMinAchieved() & trialCount<maxTrial){
             Random rand = new Random();
             myFirstMeal.addIngredient(ingredients[rand.nextInt(ingredients.length)]);
-            nbIngredients = myFirstMeal.getIngredients().size();
+            trialCount ++;
         }
-        out.print(myFirstMeal.toString());
+        if(myFirstMeal.allTypesMinAchieved()){
+            out.print("Meal found in " + trialCount + " trials" + "\n" +
+                    myFirstMeal.toString());
+        } else {
+            out.print("No valid meal found after "+trialCount+" trials");
+        }
 
         /*try {
             String csvfileString = this.getApplicationInfo().dataDir + File.separatorChar + "ingredients.csv";

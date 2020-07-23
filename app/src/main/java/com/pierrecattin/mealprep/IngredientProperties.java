@@ -10,6 +10,7 @@ public class IngredientProperties {
         types.add("Carbs");
         types.add("Veggies");
         types.add("Protein");
+        types.add("Sauce");
 
         styles.add("European");
         styles.add("Asian");
