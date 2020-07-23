@@ -16,6 +16,12 @@ public class Ingredient {
         this.setType(type);
     }
 
+    public Ingredient(String name, String type, Set<String> styles){
+        this.setName(name);
+        this.setType(type);
+        for (String style : styles) this.addStyle(style);
+    }
+
     public String getName(){
         return(name);
     }
@@ -28,8 +34,7 @@ public class Ingredient {
         return(type);
     }
     public boolean setType(String type){
-        IngredientProperties ingredientProperties = new IngredientProperties();
-        if(ingredientProperties.types.contains(type)){
+        if(IngredientProperties.types.contains(type)){
             this.type = type;
             return(true);
         } else {
@@ -41,8 +46,7 @@ public class Ingredient {
         return(styles);
     }
     public boolean addStyle(String style){
-        IngredientProperties ingredientProperties = new IngredientProperties();
-        if(ingredientProperties.styles.contains(style)){
+        if(IngredientProperties.styles.contains(style)){
             styles.add(style);
             return(true);
         } else {

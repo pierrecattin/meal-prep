@@ -18,6 +18,12 @@ public class Constraints {
         maxByType.put("Veggies", 2);
 
         minByType.put("Protein", 1);
-        minByType.put("Protein", 2);
+        maxByType.put("Protein", 1);
+
+        minByType.put("Peas", 0);
+        maxByType.put("Peas", 1);
+
+        minByType.put("Sauce", 1);
+        maxByType.put("Sauce", 1);
     }
 }

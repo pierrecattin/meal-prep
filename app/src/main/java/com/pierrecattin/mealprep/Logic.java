@@ -1,10 +1,14 @@
 package com.pierrecattin.mealprep;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.Set;
+
 import com.opencsv.CSVReader;
 
 
@@ -15,22 +19,30 @@ public class Logic {
     }
 
     public void process(){
-        Ingredient[] ingredients =  new Ingredient[10];
-        ingredients[0] = new Ingredient("Pasta", "Carbs");
-        ingredients[1] = new Ingredient("Broccoli", "Veggies");
-        ingredients[2] = new Ingredient("Tofu", "Protein");
-        ingredients[3] = new Ingredient("Rice", "Carbs");
-        ingredients[4] = new Ingredient("Soy sauce", "Sauce");
-        ingredients[5] = new Ingredient("Potatoes", "Carbs");
-        ingredients[6] = new Ingredient("Carrots", "Veggies");
-        ingredients[7] = new Ingredient("Pumpkin", "Veggies");
-        ingredients[8] = new Ingredient("Quorn", "Protein");
-        ingredients[9] = new Ingredient("Chickpeas", "Protein");
+        IngredientProperties ingredientProperties = new IngredientProperties();
 
-        ingredients[0].addStyle("European");
-        ingredients[2].addStyle("Asian");
-        ingredients[2].addStyle("Dough");
-        ingredients[4].addStyle("Asian");
+        Set<Ingredient> ingredientsSet=new HashSet<Ingredient>();
+        ingredientsSet.add(new Ingredient("Pasta", "Carbs", new HashSet<>(Arrays.asList("European"))));
+        ingredientsSet.add(new Ingredient("Rice", "Carbs"));
+        ingredientsSet.add(new Ingredient("Potatoes", "Carbs"));
+
+        ingredientsSet.add(new Ingredient("Tofu", "Protein"));
+        ingredientsSet.add(new Ingredient("Quorn", "Protein"));
+        ingredientsSet.add(new Ingredient("Veggie mince meat", "Protein"));
+
+        ingredientsSet.add(new Ingredient("Chickpeas", "Peas"));
+        ingredientsSet.add(new Ingredient("Green beans", "Peas"));
+        
+        ingredientsSet.add(new Ingredient("Broccoli", "Veggies"));
+        ingredientsSet.add(new Ingredient("Carrots", "Veggies"));
+        ingredientsSet.add(new Ingredient("Pumpkin", "Veggies", new HashSet<>(Arrays.asList("European"))));
+
+        ingredientsSet.add(new Ingredient("Soy sauce", "Sauce", new HashSet<>(Arrays.asList("Asian"))));
+        ingredientsSet.add(new Ingredient("Cream", "Sauce"));
+        ingredientsSet.add(new Ingredient("White Wine", "Sauce", new HashSet<>(Arrays.asList("European"))));
+
+        Ingredient[] ingredients = ingredientsSet.toArray( new Ingredient[ingredientsSet.size()]);
+
 
         //out.print(ingredients[0].toString());
 
@@ -43,7 +55,7 @@ public class Logic {
             trialCount ++;
         }
         if(myFirstMeal.allTypesMinAchieved()){
-            out.print("Meal found in " + trialCount + " trials" + "\n" +
+            out.print("Meal found in " + trialCount + " trials" + "\n\n" +
                     myFirstMeal.toString());
         } else {
             out.print("No valid meal found after "+trialCount+" trials");

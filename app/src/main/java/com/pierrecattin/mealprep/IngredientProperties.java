@@ -8,8 +8,9 @@ public class IngredientProperties {
 
     public IngredientProperties(){
         types.add("Carbs");
-        types.add("Veggies");
         types.add("Protein");
+        types.add("Peas");
+        types.add("Veggies");
         types.add("Sauce");
 
         styles.add("European");

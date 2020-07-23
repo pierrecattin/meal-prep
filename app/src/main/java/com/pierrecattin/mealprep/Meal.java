@@ -75,16 +75,17 @@ public class Meal {
     }
 
     public String toString(){
-        String strOutput = "Ingredients: ";
-        for (Ingredient ingredient : ingredients){
-            strOutput += (ingredient.getName() + "; ");
-        }
-        strOutput += "\n";
-        strOutput += "Ingredient types: ";
+        String strOutput = "";
         for(String type:IngredientProperties.types){
-            strOutput += (type + "=" + this.countType(type) + "; ");
+            strOutput += type + ": " + "\n";
+            for (Ingredient ingredient : ingredients){
+                if(ingredient.getType()==type){
+                    strOutput += (ingredient.getName() + "; ");
+                }
+            }
+            strOutput +=  "\n\n";
         }
-        strOutput += "\n";
+        strOutput +=  "\n\n";
         strOutput += "Style(s): ";
         strOutput += this.getStyles().toString();
         return(strOutput);
