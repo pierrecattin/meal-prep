@@ -20,7 +20,7 @@ public class IngredientRepository {
         return mAllIngredients;
     }
 
-    public void intert (Ingredient ingredient){
+    public void insert (Ingredient ingredient){
         new insertAsyncTask(mIngredientDao).execute(ingredient);
     }
 
