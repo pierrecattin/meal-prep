@@ -1,5 +1,7 @@
 package com.pierrecattin.mealprep;
 
+
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -15,5 +17,5 @@ public interface IngredientDao {
     void deleteAll();
 
     @Query("SELECT * from ingredient_table")
-    Set<Ingredient> getAllIngredients();
+    LiveData<Set<Ingredient>> getAllIngredients();
 }
