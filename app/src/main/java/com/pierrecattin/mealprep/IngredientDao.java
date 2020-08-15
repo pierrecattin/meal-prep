@@ -6,7 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import java.util.Set;
+import java.util.List;
 
 @Dao
 public interface IngredientDao {
@@ -17,5 +17,5 @@ public interface IngredientDao {
     void deleteAll();
 
     @Query("SELECT * from ingredient_table")
-    LiveData<Set<Ingredient>> getAllIngredients();
+    LiveData<List<Ingredient>> getAllIngredients();
 }

@@ -22,7 +22,7 @@ public class Logic {
         IngredientProperties ingredientProperties = new IngredientProperties();
 
         Set<Ingredient> ingredientsSet=new HashSet<Ingredient>();
-        ingredientsSet.add(new Ingredient("Pasta", "Carbs", new HashSet<>(Arrays.asList("European"))));
+        ingredientsSet.add(new Ingredient("Pasta", "Carbs"));
         ingredientsSet.add(new Ingredient("Rice", "Carbs"));
         ingredientsSet.add(new Ingredient("Potatoes", "Carbs"));
 
@@ -35,11 +35,11 @@ public class Logic {
         
         ingredientsSet.add(new Ingredient("Broccoli", "Veggies"));
         ingredientsSet.add(new Ingredient("Carrots", "Veggies"));
-        ingredientsSet.add(new Ingredient("Pumpkin", "Veggies", new HashSet<>(Arrays.asList("European"))));
+        ingredientsSet.add(new Ingredient("Pumpkin", "Veggies"));
 
-        ingredientsSet.add(new Ingredient("Soy sauce", "Sauce", new HashSet<>(Arrays.asList("Asian"))));
+        ingredientsSet.add(new Ingredient("Soy sauce", "Sauce"));
         ingredientsSet.add(new Ingredient("Cream", "Sauce"));
-        ingredientsSet.add(new Ingredient("White Wine", "Sauce", new HashSet<>(Arrays.asList("European"))));
+        ingredientsSet.add(new Ingredient("White Wine", "Sauce"));
 
         Ingredient[] ingredients = ingredientsSet.toArray( new Ingredient[ingredientsSet.size()]);
 

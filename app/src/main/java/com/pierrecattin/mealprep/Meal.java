@@ -22,7 +22,7 @@ public class Meal {
         }
 
         // Check that ingredients has a style that's compatible with all other ingredients
-        if(ingredient.getStyles().size()>0 & this.getStyles().size()>0){
+        /*if(ingredient.getStyles().size()>0 & this.getStyles().size()>0){
             Set commonStyles;
             for (Ingredient otherIngredient : ingredients){
                 if(otherIngredient.getStyles().size()>0){
@@ -33,7 +33,7 @@ public class Meal {
                     }
                 }
             }
-        }
+        } */
         ingredients.add(ingredient);
         return(true);
 
@@ -53,13 +53,13 @@ public class Meal {
         return count;
     }
 
-    public Set<String> getStyles(){
+    /*public Set<String> getStyles(){
         Set<String> styles=new HashSet<String>();
         for (Ingredient ingredient : ingredients){
             styles.addAll(ingredient.getStyles());
         }
         return(styles);
-    }
+    }*/
 
     public boolean allTypesMinAchieved(){
         Constraints constraints = new Constraints();
@@ -86,8 +86,8 @@ public class Meal {
             strOutput +=  "\n\n";
         }
         strOutput +=  "\n\n";
-        strOutput += "Style(s): ";
-        strOutput += this.getStyles().toString();
+        //strOutput += "Style(s): ";
+        //strOutput += this.getStyles().toString();
         return(strOutput);
     }
 
