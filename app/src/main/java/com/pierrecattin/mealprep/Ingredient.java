@@ -1,19 +1,38 @@
 package com.pierrecattin.mealprep;
 
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity(tableName = "ingredient_table")
 public class Ingredient {
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name="name")
     private String name;
-    private String type;
-    private Set<String> styles = new HashSet<String>();
 
-    public Ingredient(){
-    }
+    @NonNull
+    @ColumnInfo(name="type")
+    private String type;
+
+    @ColumnInfo(name="stylesString")
+    private String stylesString;
+    private Set styles = new HashSet<String>();
+
     public Ingredient(String name, String type){
         this.setName(name);
         this.setType(type);
+    }
+
+    public Ingredient(@NonNull String name, @NonNull String type, String stylesString){
+        this.setName(name);
+        this.setType(type);
+        this.setStylesString(stylesString);
     }
 
     public Ingredient(String name, String type, Set<String> styles){
@@ -40,6 +59,14 @@ public class Ingredient {
         } else {
             return(false);
         }
+    }
+
+    private String getStylesString() {
+        return(this.stylesString);
+    }
+
+    private void setStylesString(String stylesString) {
+        this.stylesString=stylesString;
     }
 
     public Set getStyles(){
