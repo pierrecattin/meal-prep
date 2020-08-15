@@ -11,7 +11,7 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
     public abstract IngredientDao ingredientDao();
 
     private static IngredientRoomDatabase INSTANCE;
-    private static IngredientRoomDatabase getDatabase(final Context context){
+    static IngredientRoomDatabase getDatabase(final Context context){
         if(INSTANCE == null) {
             synchronized (IngredientRoomDatabase.class){
                 if (INSTANCE== null){
