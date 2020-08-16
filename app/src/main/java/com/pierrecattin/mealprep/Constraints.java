@@ -27,7 +27,7 @@ public class Constraints {
         maxByType.put("Sauce", 1);
 
         minByType.put("Spice", 0);
-        maxByType.put("Sauce", 1);
+        maxByType.put("Spice", 1);
 
 
     }

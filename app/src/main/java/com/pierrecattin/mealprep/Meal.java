@@ -25,28 +25,12 @@ public class Meal {
             }
         }
 
-        // Check that ingredients has a style that's compatible with all other ingredients
-        //Log.i(TAG, "#################################");
-        //Log.i(TAG, "Trying new ingredient: " + ingredient.toString());
-        //Log.i(TAG, ingredient.getStylesString());
-        //Log.i(TAG, "Styles currently in meal:");
-        //Log.i(TAG, mStyles.toString());
+        // Check that ingredient has a style that's shared by all ingredients
         if(ingredient.getStyles().size()>0 & this.getStyles().size()>0){
-            Set commonStyles;
-
-            Iterator<Ingredient> itr = mIngredients.iterator();
-            while(itr.hasNext()){
-                Ingredient otherIngredient=itr.next();
-                // Log.i(TAG, "----------- Other ingredient: "+otherIngredient.toString());
-                // Log.i(TAG, "----------- styles: "+otherIngredient.getStyles().toString());
-                if(otherIngredient.getStyles().size()>0){
-                    commonStyles=otherIngredient.getStyles();
-                    commonStyles.retainAll(ingredient.getStyles());
-                    //  Log.i(TAG, "----------- commonstyles:"+commonStyles.toString());
-                    if (commonStyles.size()==0){
-                        return(false);
-                    }
-                }
+            Set commonStyles = ingredient.getStyles();
+            commonStyles.retainAll(this.getCommonStyles());
+            if (commonStyles.size()==0){
+                return(false);
             }
         }
         // Log.i(TAG, "!!!ADDING " + ingredient.getName());
@@ -85,6 +69,26 @@ public class Meal {
         return(mStyles);
     }
 
+    // Finds styles that are shared by all ingredients
+    public Set<String> getCommonStyles(){
+        Iterator<Ingredient> itr = mIngredients.iterator();
+        Set<String> commonStyles = new HashSet<String>();
+        // Fill commonStyles with styles of first ingredient that has styles
+        while(itr.hasNext() & commonStyles.isEmpty()){
+            Ingredient ingredient=itr.next();
+            if(!ingredient.getStyles().isEmpty()){
+                commonStyles=ingredient.getStyles();
+            }
+        }
+
+        // Keep iterating to retain only common styles
+        while(itr.hasNext()){
+            Ingredient ingredient=itr.next();
+            commonStyles.retainAll(ingredient.getStyles());
+        }
+        return commonStyles;
+    }
+
     public boolean allTypesMinAchieved(){
         Constraints constraints = new Constraints();
         Set<String> types = constraints.minByType.keySet();
@@ -113,7 +117,7 @@ public class Meal {
         }
         strOutput +=  "\n\n";
         strOutput += "Style(s): ";
-        strOutput += this.mStyles.toString();
+        strOutput += this.getCommonStyles().toString();
         return(strOutput);
     }
 
