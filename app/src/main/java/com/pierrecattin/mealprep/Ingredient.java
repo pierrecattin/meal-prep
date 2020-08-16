@@ -1,6 +1,8 @@
 package com.pierrecattin.mealprep;
 
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -38,13 +40,14 @@ public class Ingredient {
     private String mStylesString;
 
     @Ignore
-    private Set mStyles = new HashSet<String>();
+    private Set<String> mStyles = new HashSet<String>();
 
     public Ingredient(@NonNull String name, @NonNull String type, String stylesString){
         this.setName(name);
         this.setType(type);
         this.setStylesString(stylesString);
         this.fillStylesFromString(stylesString);
+        //Log.i(TAG, "Creating Ingredient "+mName+"; "+mType+"; "+this.getStyles().toString());
     }
 
     public void setName(String name){
@@ -94,6 +97,7 @@ public class Ingredient {
     }
 
     public Set<String> getStyles(){
+        this.fillStylesFromString(mStylesString);
         return(mStyles);
     }
 
@@ -103,7 +107,7 @@ public class Ingredient {
 
     public String toString(){
         if(mStyles.size()==0){
-            return(mName +"; "+ mType +"; "+ mStylesString);
+            return(mName +"; "+ mType);
         } else {
             return(mName +"; "+ mType +"; " + mStyles.toString());
         }

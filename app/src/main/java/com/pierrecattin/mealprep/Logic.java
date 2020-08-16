@@ -20,7 +20,7 @@ public class Logic {
     }
 
     public void process(){
-        Log.i("process", "||||||||||||||||||||||||||||||||||||| Generating Meal |||||||||||||||||||||||||||||||||||||");
+        //Log.i("process", "||||||||||||||||||||||||||||||||||||| Generating Meal |||||||||||||||||||||||||||||||||||||");
         IngredientProperties ingredientProperties = new IngredientProperties();
         Meal myFirstMeal = new Meal();
         int maxTrial = 1000;

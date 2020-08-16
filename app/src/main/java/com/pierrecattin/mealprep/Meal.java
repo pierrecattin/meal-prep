@@ -26,29 +26,34 @@ public class Meal {
         }
 
         // Check that ingredients has a style that's compatible with all other ingredients
-        Log.i(TAG, "#################################");
-        Log.i(TAG, "Trying new ingredient: " + ingredient.toString());
-        Log.i(TAG, ingredient.getStylesString());
-        Log.i(TAG, "Styles currently in meal:");
-        Log.i(TAG, mStyles.toString());
+        //Log.i(TAG, "#################################");
+        //Log.i(TAG, "Trying new ingredient: " + ingredient.toString());
+        //Log.i(TAG, ingredient.getStylesString());
+        //Log.i(TAG, "Styles currently in meal:");
+        //Log.i(TAG, mStyles.toString());
         if(ingredient.getStyles().size()>0 & this.getStyles().size()>0){
             Set commonStyles;
-            for (Ingredient otherIngredient : mIngredients){
-                Log.i(TAG, "----------- Other ingredient: "+otherIngredient.toString());
-                Log.i(TAG, "----------- styles: "+otherIngredient.getStyles().toString());
-                if(otherIngredient.getStyles().size()>0){ //ISSUE: otherIngredient.getStyles is sometimes empty when otherIngredient actually has styles
+
+            Iterator<Ingredient> itr = mIngredients.iterator();
+            while(itr.hasNext()){
+                Ingredient otherIngredient=itr.next();
+                // Log.i(TAG, "----------- Other ingredient: "+otherIngredient.toString());
+                // Log.i(TAG, "----------- styles: "+otherIngredient.getStyles().toString());
+                if(otherIngredient.getStyles().size()>0){
                     commonStyles=otherIngredient.getStyles();
                     commonStyles.retainAll(ingredient.getStyles());
-                    Log.i(TAG, "----------- commonstyles:"+commonStyles.toString());
+                    //  Log.i(TAG, "----------- commonstyles:"+commonStyles.toString());
                     if (commonStyles.size()==0){
                         return(false);
                     }
                 }
             }
         }
-        Log.i(TAG, "!!!ADDING " + ingredient.getName());
+        // Log.i(TAG, "!!!ADDING " + ingredient.getName());
         mIngredients.add(ingredient);
         addStyles(ingredient.getStyles());
+        // Log.i(TAG, "Styles currently in meal:");
+        // Log.i(TAG, mStyles.toString());
         return(true);
 
     }
