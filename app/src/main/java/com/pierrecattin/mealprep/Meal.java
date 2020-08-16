@@ -8,11 +8,12 @@ import java.util.Set;
 
 public class Meal {
     private static final String TAG = "Meal";
-    private Set<Ingredient> ingredients=new HashSet<Ingredient>();
+    private Set<Ingredient> mIngredients =new HashSet<Ingredient>();
+    private Set<String> mStyles =new HashSet<String>();
 
     public boolean addIngredient(Ingredient ingredient){
         // Check that ingredient is not already in meal
-        if(ingredients.contains(ingredient)){
+        if(mIngredients.contains(ingredient)){
             return(false);
         }
 
@@ -25,32 +26,41 @@ public class Meal {
         }
 
         // Check that ingredients has a style that's compatible with all other ingredients
-        /*if(ingredient.getStyles().size()>0 & this.getStyles().size()>0){
+        Log.i(TAG, "#################################");
+        Log.i(TAG, "Trying new ingredient: " + ingredient.toString());
+        Log.i(TAG, ingredient.getStylesString());
+        Log.i(TAG, "Styles currently in meal:");
+        Log.i(TAG, mStyles.toString());
+        if(ingredient.getStyles().size()>0 & this.getStyles().size()>0){
             Set commonStyles;
-            for (Ingredient otherIngredient : ingredients){
-                if(otherIngredient.getStyles().size()>0){
+            for (Ingredient otherIngredient : mIngredients){
+                Log.i(TAG, "----------- Other ingredient: "+otherIngredient.toString());
+                Log.i(TAG, "----------- styles: "+otherIngredient.getStyles().toString());
+                if(otherIngredient.getStyles().size()>0){ //ISSUE: otherIngredient.getStyles is sometimes empty when otherIngredient actually has styles
                     commonStyles=otherIngredient.getStyles();
                     commonStyles.retainAll(ingredient.getStyles());
+                    Log.i(TAG, "----------- commonstyles:"+commonStyles.toString());
                     if (commonStyles.size()==0){
                         return(false);
                     }
                 }
             }
-        } */
-        Log.i(TAG, "Adding " + ingredient.getName());
-        ingredients.add(ingredient);
+        }
+        Log.i(TAG, "!!!ADDING " + ingredient.getName());
+        mIngredients.add(ingredient);
+        addStyles(ingredient.getStyles());
         return(true);
 
     }
 
     public Set<Ingredient> getIngredients(){
-        return(ingredients);
+        return(mIngredients);
     }
 
     public int countType(String type){
         int count=0;
         //Log.v(TAG, "countType: counting number of "+type);
-        for (Ingredient ingredient : ingredients){
+        for (Ingredient ingredient : mIngredients){
             //Log.v(TAG, "countType: type of "+ingredient.getName()+": "+ingredient.getType());
             if(ingredient.getType().equals(type)){
                 count++;
@@ -59,13 +69,16 @@ public class Meal {
         return count;
     }
 
-    /*public Set<String> getStyles(){
-        Set<String> styles=new HashSet<String>();
-        for (Ingredient ingredient : ingredients){
-            styles.addAll(ingredient.getStyles());
+    private void addStyles(Set<String> styles){
+        //Log.i(TAG, "addStyles: "+styles.toString());
+        for(String style : styles){
+            this.mStyles.add(style);
         }
-        return(styles);
-    }*/
+        //Log.i(TAG, "Current styles"+this.mStyles);
+    }
+    public Set<String> getStyles(){
+        return(mStyles);
+    }
 
     public boolean allTypesMinAchieved(){
         Constraints constraints = new Constraints();
@@ -86,7 +99,7 @@ public class Meal {
         String strOutput = "";
         for(String type:IngredientProperties.types){
             strOutput += type + ": " + "\n";
-            for (Ingredient ingredient : ingredients){
+            for (Ingredient ingredient : mIngredients){
                 if(ingredient.getType().equals(type)){
                     strOutput += (ingredient.getName() + "; ");
                 }
@@ -94,8 +107,8 @@ public class Meal {
             strOutput +=  "\n\n";
         }
         strOutput +=  "\n\n";
-        //strOutput += "Style(s): ";
-        //strOutput += this.getStyles().toString();
+        strOutput += "Style(s): ";
+        strOutput += this.mStyles.toString();
         return(strOutput);
     }
 

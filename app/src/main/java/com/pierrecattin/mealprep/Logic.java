@@ -20,9 +20,8 @@ public class Logic {
     }
 
     public void process(){
+        Log.i("process", "||||||||||||||||||||||||||||||||||||| Generating Meal |||||||||||||||||||||||||||||||||||||");
         IngredientProperties ingredientProperties = new IngredientProperties();
-        Log.i("process", "Number of ingredients: " + ingredients.size());
-
         Meal myFirstMeal = new Meal();
         int maxTrial = 1000;
         int trialCount = 0;

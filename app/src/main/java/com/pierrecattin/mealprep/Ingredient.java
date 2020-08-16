@@ -10,82 +10,103 @@ import androidx.room.PrimaryKey;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.apache.commons.lang3.StringUtils.countMatches;
+import static org.apache.commons.lang3.StringUtils.endsWith;
+import static org.apache.commons.lang3.StringUtils.remove;
+import static org.apache.commons.lang3.StringUtils.replace;
+import static org.apache.commons.lang3.StringUtils.startsWith;
+import static org.apache.commons.lang3.StringUtils.strip;
+import static org.apache.commons.lang3.StringUtils.substring;
+import static org.apache.commons.lang3.StringUtils.substringsBetween;
+
 @Entity(tableName = "ingredient_table")
 public class Ingredient {
+    @Ignore
+    private static final String TAG = "Ingredient";
+
+
     @PrimaryKey
     @NonNull
     @ColumnInfo(name="name")
-    private String name;
+    private String mName;
 
     @NonNull
     @ColumnInfo(name="type")
-    private String type;
+    private String mType;
 
     @ColumnInfo(name="stylesString")
-    private String stylesString;
-    //private Set styles = new HashSet<String>();
+    private String mStylesString;
 
-    /*@Ignore
-    public Ingredient(String name, String type){
-        this.setName(name);
-        this.setType(type);
-    }*/
+    @Ignore
+    private Set mStyles = new HashSet<String>();
 
     public Ingredient(@NonNull String name, @NonNull String type, String stylesString){
         this.setName(name);
         this.setType(type);
         this.setStylesString(stylesString);
+        this.fillStylesFromString(stylesString);
     }
 
-    /*@Ignore
-    public Ingredient(String name, String type, Set<String> styles){
-        this.setName(name);
-        this.setType(type);
-        for (String style : styles) this.addStyle(style);
-    }*/
-
-    public boolean setName(String name){
-        this.name = name;
-        return(true);
+    public void setName(String name){
+        mName = name;
     }
     public void setType(String type){
-        this.type = type;
+        mType = type;
     }
     private void setStylesString(String stylesString) {
-        this.stylesString = stylesString;
+        mStylesString = stylesString;
     }
 
     public String getName(){
-        return(name);
+        return(mName);
     }
     public String getType(){
-        return(type);
+        return(mType);
     }
 
     public String getStylesString() {
-        return(this.stylesString);
+        return(mStylesString);
     }
 
+    private void fillStylesFromString(String stylesString){
+        if(stylesString != null){
+            //Log.i(TAG, "stylesString:"+stylesString+"---------------------------");
+            stylesString = remove(stylesString, " "); // remove all spaces
 
-    /*public Set getStyles(){
-        return(styles);
-    } */
+            if(endsWith(stylesString, ";")){
+                stylesString = substring(stylesString, 0, stylesString.length()-1); // remove final ;
+            }
+            if(startsWith(stylesString, ";")){
+                stylesString = substring(stylesString, 1, stylesString.length()); // remove initial ;
+            }
+            // replace semi colons so that styles are surrounded by [ ]
+            stylesString = replace(stylesString, ";", "][");
+            stylesString = "["+stylesString+"]";
 
-    /* public boolean addStyle(String style){
-        if(IngredientProperties.styles.contains(style)){
-            styles.add(style);
-            return(true);
-        } else {
-            return(false);
+            //Log.i(TAG, stylesString);
+            String[] stylesArray = substringsBetween(stylesString, "[","]");
+
+            for (int i=0; i<stylesArray.length; i++){
+                this.addStyle(stylesArray[i]);
+            }
         }
-    } */
+
+    }
+
+    public Set<String> getStyles(){
+        return(mStyles);
+    }
+
+    public void addStyle(String style){
+        mStyles.add(style);
+    }
 
     public String toString(){
-        //if(styles.size()==0){
-            return(name+"; "+type+"; "+stylesString);
-        //} else {
-        //    return(name+"; "+type+"; " + styles.toString());
-        //}
+        if(mStyles.size()==0){
+            return(mName +"; "+ mType +"; "+ mStylesString);
+        } else {
+            return(mName +"; "+ mType +"; " + mStyles.toString());
+        }
     }
 
 }
