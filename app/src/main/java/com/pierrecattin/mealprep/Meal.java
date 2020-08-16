@@ -1,10 +1,13 @@
 package com.pierrecattin.mealprep;
 
+import android.util.Log;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 public class Meal {
+    private static final String TAG = "Meal";
     private Set<Ingredient> ingredients=new HashSet<Ingredient>();
 
     public boolean addIngredient(Ingredient ingredient){
@@ -34,6 +37,7 @@ public class Meal {
                 }
             }
         } */
+        Log.i(TAG, "Adding " + ingredient.getName());
         ingredients.add(ingredient);
         return(true);
 
@@ -45,8 +49,10 @@ public class Meal {
 
     public int countType(String type){
         int count=0;
+        //Log.v(TAG, "countType: counting number of "+type);
         for (Ingredient ingredient : ingredients){
-            if(ingredient.getType() == type){
+            //Log.v(TAG, "countType: type of "+ingredient.getName()+": "+ingredient.getType());
+            if(ingredient.getType().equals(type)){
                 count++;
             }
         }
@@ -64,10 +70,12 @@ public class Meal {
     public boolean allTypesMinAchieved(){
         Constraints constraints = new Constraints();
         Set<String> types = constraints.minByType.keySet();
+        //Log.i(TAG, "types:"+types);
         Iterator<String> itr = types.iterator();
         while (itr.hasNext()){
             String type=itr.next();
-            if (this.countType(type)<constraints.minByType.get(type)){
+            //Log.i(TAG, "allTypesMinAchieved; checking min for Type "+ type+"; current number="+this.countType(type) +" / " + constraints.minByType.get(type));
+            if (this.countType(type) < constraints.minByType.get(type)){
                 return(false);
             }
         }
@@ -79,7 +87,7 @@ public class Meal {
         for(String type:IngredientProperties.types){
             strOutput += type + ": " + "\n";
             for (Ingredient ingredient : ingredients){
-                if(ingredient.getType()==type){
+                if(ingredient.getType().equals(type)){
                     strOutput += (ingredient.getName() + "; ");
                 }
             }

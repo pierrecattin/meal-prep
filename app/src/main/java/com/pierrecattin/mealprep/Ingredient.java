@@ -25,20 +25,16 @@ public class Ingredient {
     private String stylesString;
     //private Set styles = new HashSet<String>();
 
-    @Ignore
+    /*@Ignore
     public Ingredient(String name, String type){
         this.setName(name);
         this.setType(type);
-    }
+    }*/
 
     public Ingredient(@NonNull String name, @NonNull String type, String stylesString){
         this.setName(name);
         this.setType(type);
         this.setStylesString(stylesString);
-    }
-
-    private void setStylesString(String stylesString) {
-        this.stylesString = stylesString;
     }
 
     /*@Ignore
@@ -48,33 +44,28 @@ public class Ingredient {
         for (String style : styles) this.addStyle(style);
     }*/
 
-    public String getName(){
-        return(name);
-    }
     public boolean setName(String name){
         this.name = name;
         return(true);
     }
+    public void setType(String type){
+        this.type = type;
+    }
+    private void setStylesString(String stylesString) {
+        this.stylesString = stylesString;
+    }
 
+    public String getName(){
+        return(name);
+    }
     public String getType(){
         return(type);
-    }
-    public boolean setType(String type){
-        if(IngredientProperties.types.contains(type)){
-            this.type = type;
-            return(true);
-        } else {
-            return(false);
-        }
     }
 
     public String getStylesString() {
         return(this.stylesString);
     }
 
-    /*private void setStylesString(String stylesString) {
-        this.stylesString=stylesString;
-    }*/
 
     /*public Set getStyles(){
         return(styles);

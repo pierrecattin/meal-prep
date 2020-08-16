@@ -18,6 +18,7 @@ public abstract class IngredientRoomDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             IngredientRoomDatabase.class, "ingredient_database")
                             .fallbackToDestructiveMigration()
+                            .createFromAsset("database/ingredient_database.db")
                             .build();
                 }
             }
