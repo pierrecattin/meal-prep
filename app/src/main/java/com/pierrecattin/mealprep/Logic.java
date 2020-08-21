@@ -20,22 +20,13 @@ public class Logic {
     }
 
     public void process(){
-        //Log.i("process", "||||||||||||||||||||||||||||||||||||| Generating Meal |||||||||||||||||||||||||||||||||||||");
+        String stringOut="";
         IngredientProperties ingredientProperties = new IngredientProperties();
-        Meal myFirstMeal = new Meal();
-        int maxTrial = 1000;
-        int trialCount = 0;
-        while (!myFirstMeal.allTypesMinAchieved() & trialCount<maxTrial){
-            Random rand = new Random();
-            myFirstMeal.addIngredient(ingredients.get(rand.nextInt(ingredients.size())));
-            trialCount ++;
+        MealPlan plan = new MealPlan(2, ingredients);
+        for (int i=0; i<plan.size(); i++){
+            stringOut = stringOut + plan.getMeals().get(i).toString();
         }
-        if(myFirstMeal.allTypesMinAchieved()){
-            out.print("Meal found in " + trialCount + " trials" + "\n\n" +
-                    myFirstMeal.toString());
-        } else {
-            out.print("No valid meal found after "+trialCount+" trials");
-        }
+        out.print(stringOut);
 
     }
 
