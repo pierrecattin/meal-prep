@@ -138,17 +138,17 @@ public class Meal {
     public String toString(){
         String strOutput = "";
         for(String type:IngredientProperties.types){
-            strOutput += type + ": " + "\n";
+            strOutput += type + ": ";
             for (Ingredient ingredient : mIngredients){
                 if(ingredient.getType().equals(type)){
                     strOutput += (ingredient.getName() + "; ");
                 }
             }
-            strOutput +=  "\n\n";
+            strOutput +=  "\n";
         }
-        strOutput +=  "\n\n";
         strOutput += "Style(s): ";
         strOutput += this.getCommonStyles().toString();
+        strOutput +=  "\n\n";
         return(strOutput);
     }
 

@@ -10,20 +10,21 @@
         android:id="@+id/buttonGenerate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate Plan"
         android:onClick="generatePressed"
-        app:layout_constraintBottom_toTopOf="@+id/textViewIngredient"
+        android:text="Generate Plan"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewIngredient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:scrollbars="vertical"
+        android:layout_marginTop="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonGenerate" />
 </androidx.constraintlayout.widget.ConstraintLayout>

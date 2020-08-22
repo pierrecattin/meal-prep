@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.lifecycle.Observer;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,7 +24,6 @@ public class InputActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initializeUI();
         logic = new Logic(this);
-
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
         mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
@@ -40,6 +40,7 @@ public class InputActivity extends AppCompatActivity {
 
         generate = (Button)findViewById(R.id.buttonGenerate);
         ingredientDisplay = (TextView)findViewById(R.id.textViewIngredient);
+        ingredientDisplay.setMovementMethod(new ScrollingMovementMethod());
     }
     public void generatePressed(View view){
         logic.process();
