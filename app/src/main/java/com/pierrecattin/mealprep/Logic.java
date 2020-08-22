@@ -19,10 +19,10 @@ public class Logic {
         this.ingredients = ingredients;
     }
 
-    public void process(){
+    public void generateMealPlan(int nbMeals){
         String stringOut="";
         IngredientProperties ingredientProperties = new IngredientProperties();
-        MealPlan plan = new MealPlan(5, ingredients);
+        MealPlan plan = new MealPlan(nbMeals, ingredients);
         for (int i=0; i<plan.size(); i++){
             stringOut = stringOut + plan.getMeals().get(i).toString();
         }

@@ -6,25 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".InputActivity">
 
+    <NumberPicker
+        android:id="@+id/numberPickerMeals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewMealPlan"
+        app:layout_constraintEnd_toStartOf="@+id/buttonGenerate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/buttonGenerate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
         android:onClick="generatePressed"
         android:text="Generate Plan"
-        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewMealPlan"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/numberPickerMeals"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewIngredient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/textViewMealPlan"
+        android:layout_width="300dp"
+        android:layout_height="450dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginBottom="100dp"
         android:scrollbars="vertical"
-        android:layout_marginTop="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonGenerate" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

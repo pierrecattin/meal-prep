@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.List;
 public class InputActivity extends AppCompatActivity {
     private Button generate;
     private TextView ingredientDisplay;
+    private NumberPicker numberPickerMeals;
+
     private Logic logic;
     private IngredientViewModel mIngredientViewModel;
 
@@ -39,11 +42,14 @@ public class InputActivity extends AppCompatActivity {
         setContentView(R.layout.activity_input);
 
         generate = (Button)findViewById(R.id.buttonGenerate);
-        ingredientDisplay = (TextView)findViewById(R.id.textViewIngredient);
+        ingredientDisplay = (TextView)findViewById(R.id.textViewMealPlan);
         ingredientDisplay.setMovementMethod(new ScrollingMovementMethod());
+        numberPickerMeals = findViewById(R.id.numberPickerMeals);
+        numberPickerMeals.setMaxValue(9);
+        numberPickerMeals.setMinValue(1);
     }
     public void generatePressed(View view){
-        logic.process();
+        logic.generateMealPlan(numberPickerMeals.getValue());
     }
     public void print(String resultString){
         ingredientDisplay.setText(resultString);
