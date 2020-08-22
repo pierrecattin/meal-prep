@@ -45,7 +45,7 @@ public class InputActivity extends AppCompatActivity {
         ingredientDisplay = (TextView)findViewById(R.id.textViewMealPlan);
         ingredientDisplay.setMovementMethod(new ScrollingMovementMethod());
         numberPickerMeals = findViewById(R.id.numberPickerMeals);
-        numberPickerMeals.setMaxValue(9);
+        numberPickerMeals.setMaxValue(6);
         numberPickerMeals.setMinValue(1);
     }
     public void generatePressed(View view){

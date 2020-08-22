@@ -11,13 +11,10 @@ import java.util.Set;
 public class Meal {
     private static final String TAG = "Meal";
     private Set<Ingredient> mIngredients =new HashSet<Ingredient>();
-    private String mStatus;
 
     private Set<String> mStyles =new HashSet<String>(); // Could be deleted
 
     public Meal(){
-        Log.i(TAG, "Create meal");
-        mStatus="Uninitialized";
     }
     public boolean addIngredient(Ingredient ingredient){
         // Check that ingredient is not already in meal
@@ -49,6 +46,7 @@ public class Meal {
         return(true);
     }
 
+
     public boolean fillIngredients(List<Ingredient> ingredients){
         Log.i(TAG, "fillIngredients: ");
         int maxTrial = 1000;
@@ -59,18 +57,11 @@ public class Meal {
             trialCount ++;
         }
         if(this.allTypesMinAchieved()){
-            this.mStatus ="Meal found in " + trialCount + " trials" + "\n\n";
             return true;
         } else {
-            this.mStatus = "No valid meal found after "+trialCount+" trials";
             return false;
         }
 
-    }
-
-
-    public String getStatus(){
-        return mStatus;
     }
 
     public Set<Ingredient> getIngredients(){
