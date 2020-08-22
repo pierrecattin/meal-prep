@@ -22,8 +22,9 @@ public class Logic {
     public void generateMealPlan(int nbMeals){
         String stringOut="";
         IngredientProperties ingredientProperties = new IngredientProperties();
-        MealPlan plan = new MealPlan(nbMeals, ingredients);
-        for (int i=0; i<plan.size(); i++){
+        MealPlan plan = new MealPlan();
+        plan.fillMeals(nbMeals, ingredients);
+        for (int i=0; i<plan.getMeals().size(); i++){
             stringOut = stringOut + plan.getMeals().get(i).toString();
         }
         stringOut += "\n\n\n";
