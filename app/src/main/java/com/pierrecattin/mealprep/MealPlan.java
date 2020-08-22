@@ -30,7 +30,7 @@ public class MealPlan {
             mMeals.clear();
             while (iterCount<maxIterPerTrial && mMeals.size()<mNbMeals){
                 Meal newMeal = new Meal();
-                newMeal.fillIngredients(ingredients);
+                newMeal.fillIngredients(ingredients, true);
                 this.addMeal(newMeal);
                 iterCount++;
             }

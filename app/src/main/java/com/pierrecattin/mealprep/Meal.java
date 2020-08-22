@@ -47,21 +47,23 @@ public class Meal {
     }
 
 
-    public boolean fillIngredients(List<Ingredient> ingredients){
+    public boolean fillIngredients(List<Ingredient> ingredients, boolean noCarbs){
         Log.i(TAG, "fillIngredients: ");
         int maxTrial = 1000;
         int trialCount = 0;
-        while (!this.allTypesMinAchieved() & trialCount<maxTrial){
+        while (!this.allTypesMinAchieved(noCarbs) & trialCount<maxTrial){
             Random rand = new Random();
-            this.addIngredient(ingredients.get(rand.nextInt(ingredients.size())));
+            Ingredient newIngredient = ingredients.get(rand.nextInt(ingredients.size()));
+            if(!(noCarbs && newIngredient.getType().equals("Carbs"))){
+                this.addIngredient(newIngredient);
+            }
             trialCount ++;
         }
-        if(this.allTypesMinAchieved()){
+        if(this.allTypesMinAchieved(noCarbs)){
             return true;
         } else {
             return false;
         }
-
     }
 
     public Set<Ingredient> getIngredients(){
@@ -111,9 +113,14 @@ public class Meal {
         return commonStyles;
     }
 
-    public boolean allTypesMinAchieved(){
+    public boolean allTypesMinAchieved(boolean ignoreCarbs){
         Constraints constraints = new Constraints();
         Set<String> types = constraints.minByType.keySet();
+
+        if(ignoreCarbs){
+            types.remove("Carbs");
+        }
+
         //Log.i(TAG, "types:"+types);
         Iterator<String> itr = types.iterator();
         while (itr.hasNext()){
