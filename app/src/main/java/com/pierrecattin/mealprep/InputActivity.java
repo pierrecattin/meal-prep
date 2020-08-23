@@ -48,7 +48,7 @@ public class InputActivity extends AppCompatActivity {
         numberPickerMeals.setMaxValue(6);
         numberPickerMeals.setMinValue(1);
     }
-    public void generatePressed(View view){
+    public void generatePressed(View view) throws Exception {
         logic.generateMealPlan(numberPickerMeals.getValue());
     }
     public void print(String resultString){

@@ -19,7 +19,7 @@ public class Logic {
         this.ingredients = ingredients;
     }
 
-    public void generateMealPlan(int nbMeals){
+    public void generateMealPlan(int nbMeals) throws Exception {
         String stringOut="";
         IngredientProperties ingredientProperties = new IngredientProperties();
         MealPlan plan = new MealPlan();

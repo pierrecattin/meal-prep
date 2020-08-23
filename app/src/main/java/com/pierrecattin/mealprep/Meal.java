@@ -2,6 +2,7 @@ package com.pierrecattin.mealprep;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -46,25 +47,61 @@ public class Meal {
         return(true);
     }
 
+    public List<Ingredient> filterIngredients(List<Ingredient> ingredients, String type, boolean keepType){
+        List<Ingredient> filteredIngredients = new ArrayList<Ingredient>();
+        for(Ingredient ingredient : ingredients){
+            boolean keepCurrentIngredient =
+                    (keepType && ingredient.getType().equals(type)) ||
+                            (!keepType && !ingredient.getType().equals(type));
+            if(keepCurrentIngredient){
+                filteredIngredients.add(ingredient);
+            }
+        }
+        return(filteredIngredients);
+    }
 
-    public boolean fillIngredients(List<Ingredient> ingredients, boolean noCarbs){
-        Log.i(TAG, "fillIngredients: ");
-        int maxTrial = 1000;
+    public boolean fillCarbs(List<Ingredient> ingredients) throws Exception {
+        ingredients = filterIngredients(ingredients, "Carbs", true);
+        int maxTrial = 100;
         int trialCount = 0;
-        while (!this.allTypesMinAchieved(noCarbs) & trialCount<maxTrial){
+        while (!this.typesMinAchieved("Carbs") && trialCount < maxTrial) {
             Random rand = new Random();
             Ingredient newIngredient = ingredients.get(rand.nextInt(ingredients.size()));
-            if(!(noCarbs && newIngredient.getType().equals("Carbs"))){
-                this.addIngredient(newIngredient);
-            }
-            trialCount ++;
+            this.addIngredient(newIngredient);
+            trialCount++;
         }
-        if(this.allTypesMinAchieved(noCarbs)){
+        if (this.typesMinAchieved("Carbs")) {
             return true;
         } else {
             return false;
         }
     }
+
+
+    public boolean fillSauce(List<Ingredient> ingredients) throws Exception {
+        ingredients = filterIngredients(ingredients, "Carbs", false);
+        int maxTrial = 1000;
+        int trialCount = 0;
+        while (!this.typesMinAchieved("All but carbs") & trialCount < maxTrial) {
+            Random rand = new Random();
+            Ingredient newIngredient = ingredients.get(rand.nextInt(ingredients.size()));
+            this.addIngredient(newIngredient);
+            trialCount++;
+        }
+        if (this.typesMinAchieved("All but carbs")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean fillIngredients(List<Ingredient> ingredients) throws Exception {
+        boolean success=true;
+        success = success && this.fillCarbs(ingredients);
+        success= success && this.fillSauce(ingredients);
+        return(success);
+    }
+
 
     public Set<Ingredient> getIngredients(){
         return(mIngredients);
@@ -113,19 +150,19 @@ public class Meal {
         return commonStyles;
     }
 
-    public boolean allTypesMinAchieved(boolean ignoreCarbs){
+    public boolean typesMinAchieved(String typesToCheck) throws Exception {
+        Set<String> filteredTypes = new HashSet<String>();
         Constraints constraints = new Constraints();
-        Set<String> types = constraints.minByType.keySet();
-
-        if(ignoreCarbs){
-            types.remove("Carbs");
+        if(typesToCheck.equals("All but carbs")){
+            filteredTypes = constraints.minByType.keySet();
+            filteredTypes.remove("Carbs");
+        } else if (typesToCheck.equals("Carbs")){
+            filteredTypes.add("Carbs");
+        } else if (!typesToCheck.equals("All")){
+            throw new Exception("typesToCheck arg has invalid value: "+typesToCheck);
         }
 
-        //Log.i(TAG, "types:"+types);
-        Iterator<String> itr = types.iterator();
-        while (itr.hasNext()){
-            String type=itr.next();
-            //Log.i(TAG, "allTypesMinAchieved; checking min for Type "+ type+"; current number="+this.countType(type) +" / " + constraints.minByType.get(type));
+        for (String type:filteredTypes){
             if (this.countType(type) < constraints.minByType.get(type)){
                 return(false);
             }

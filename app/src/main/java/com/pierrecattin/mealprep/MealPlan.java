@@ -1,12 +1,11 @@
 package com.pierrecattin.mealprep;
 
 
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class MealPlan {
     private static final String TAG = "MealPlan";
@@ -16,10 +15,26 @@ public class MealPlan {
     public MealPlan(){
     }
 
-    public void addMeal(Meal meal){
-        mMeals.add(meal);
+    public boolean addMeal(Meal meal){
+        Map<Ingredient, Integer> ingredientsCount = this.countIngredients();
+        boolean maxIngredientReached=false;
+
+        Iterator<Ingredient> itr = meal.getIngredients().iterator();
+        while (!maxIngredientReached && itr.hasNext()) {
+            Ingredient ingredient = itr.next();
+            if (ingredientsCount.containsKey(ingredient)) {
+                maxIngredientReached = ingredientsCount.get(ingredient) >= ingredient.getMaxUsePerPlan();
+            }
+        }
+
+        if (!maxIngredientReached){
+            mMeals.add(meal);
+            return (true);
+        } else{
+            return(false);
+        }
     }
-    public boolean fillMeals(int nbMeals, List<Ingredient> ingredients){
+    public boolean fillMeals(int nbMeals, List<Ingredient> ingredients) throws Exception {
         mNbMeals = nbMeals;
         int maxTrial = 100;
         int maxIterPerTrial = 100;
@@ -30,7 +45,7 @@ public class MealPlan {
             mMeals.clear();
             while (iterCount<maxIterPerTrial && mMeals.size()<mNbMeals){
                 Meal newMeal = new Meal();
-                newMeal.fillIngredients(ingredients, true);
+                newMeal.fillIngredients(ingredients);
                 this.addMeal(newMeal);
                 iterCount++;
             }
@@ -49,12 +64,18 @@ public class MealPlan {
         return mMeals;
     }
 
-    public Set<Ingredient> getIngredients(){
-        Set<Ingredient> ingredients =new HashSet<Ingredient>();
-        for(int i=0; i<mMeals.size(); i++){
-            ingredients.addAll(mMeals.get(i).getIngredients());
+    public Map<Ingredient, Integer> countIngredients(){
+        Map<Ingredient, Integer> ingredientsCount =new HashMap<Ingredient, Integer>();
+        for(Meal meal: mMeals){
+            for (Ingredient ingredient:meal.getIngredients()){
+                if(ingredientsCount.containsKey(ingredient)){
+                    ingredientsCount.put(ingredient, ingredientsCount.get(ingredient)+1);
+                } else {
+                    ingredientsCount.put(ingredient, 1);
+                }
+            }
         }
-        return ingredients;
+        return ingredientsCount;
     }
 
 

@@ -36,19 +36,25 @@ public class Ingredient {
     @ColumnInfo(name="type")
     private String mType;
 
-    @ColumnInfo(name="stylesString")
+    @ColumnInfo(name="styles_string")
     private String mStylesString;
+
+    @NonNull
+    @ColumnInfo(name="max_use_per_plan")
+    private Integer mMaxUsePerPlan;
 
     @Ignore
     private Set<String> mStyles = new HashSet<String>();
 
-    public Ingredient(@NonNull String name, @NonNull String type, String stylesString){
+    public Ingredient(@NonNull String name, @NonNull String type, String stylesString, @NonNull int maxUsePerPlan){
         this.setName(name);
         this.setType(type);
         this.setStylesString(stylesString);
         this.fillStylesFromString(stylesString);
+        this.setMaxUsePerPlan(maxUsePerPlan);
         //Log.i(TAG, "Creating Ingredient "+mName+"; "+mType+"; "+this.getStyles().toString());
     }
+
 
     public void setName(String name){
         mName = name;
@@ -59,6 +65,9 @@ public class Ingredient {
     private void setStylesString(String stylesString) {
         mStylesString = stylesString;
     }
+    private void setMaxUsePerPlan(Integer maxUsePerPlan) {
+        mMaxUsePerPlan = maxUsePerPlan;
+    }
 
     public String getName(){
         return(mName);
@@ -66,10 +75,10 @@ public class Ingredient {
     public String getType(){
         return(mType);
     }
-
     public String getStylesString() {
         return(mStylesString);
     }
+    public Integer getMaxUsePerPlan(){ return (mMaxUsePerPlan);}
 
     private void fillStylesFromString(String stylesString){
         if(stylesString != null){
