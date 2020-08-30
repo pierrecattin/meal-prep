@@ -71,12 +71,37 @@ public class MealPlan {
         }
     }
 
+    private List<Ingredient> fillFirstMeal(List<Ingredient> ingredients) throws Exception {
+        List<Ingredient> availableIngredients = new ArrayList<Ingredient>(ingredients);
+        mMeals.get(0).fillCarbs(ingredients);
+        mMeals.get(0).fillSauce(ingredients);
+        availableIngredients.removeAll(mMeals.get(0).getIngredients());
+        return availableIngredients;
+    }
+
+
+    private List<Ingredient> fillMealFromMeal(List<Ingredient> availableIngredients, int sourceMealIndex, int targetMealIndex, String component) throws Exception {
+        if(component=="Carbs"){
+            mMeals.get(targetMealIndex).forceAddIngredients(mMeals.get(sourceMealIndex).getCarbs());
+            mMeals.get(targetMealIndex).fillSauce(availableIngredients);
+            availableIngredients.removeAll(mMeals.get(targetMealIndex).getSauce());
+        } else if(component == "Sauce"){
+            mMeals.get(targetMealIndex).forceAddIngredients(mMeals.get(sourceMealIndex).getSauce());
+            mMeals.get(targetMealIndex).fillCarbs(availableIngredients);
+            availableIngredients.removeAll(mMeals.get(targetMealIndex).getCarbs());
+        } else {
+            throw new Exception("component arg has invalid value: "+component);
+        }
+        return availableIngredients;
+    }
+
     public boolean makePlan(int nbMeals, List<Ingredient> ingredients) throws Exception {
         mNbMeals = nbMeals;
 
         Random rand = new Random();
         int maxTrial = 1000;
         int trialCount = 0;
+        Integer structure = null;
 
         if (nbMeals <= 2) {
             while (trialCount < maxTrial && !isValid()) {
@@ -93,26 +118,16 @@ public class MealPlan {
         } else if (nbMeals == 3) {
             while (trialCount < maxTrial && !isValid()) {
                 emptyMeals();
-                List<Ingredient> availableIngredients = new ArrayList<Ingredient>(ingredients);
-
-                mMeals.get(0).fillCarbs(ingredients);
-                mMeals.get(0).fillSauce(ingredients);
-
-                availableIngredients.removeAll(mMeals.get(0).getIngredients());
-
+                List<Ingredient> availableIngredients = fillFirstMeal(ingredients);
                 // two options of structure
-                if (rand.nextInt(2) == 0) {
-                    mMeals.get(2).forceAddIngredients(mMeals.get(0).getCarbs());
-                    mMeals.get(2).fillSauce(availableIngredients);
+                structure = rand.nextInt(2)+1;
 
-                    mMeals.get(1).forceAddIngredients(mMeals.get(2).getSauce());
-                    mMeals.get(1).fillCarbs(availableIngredients);
+                if (structure == 1) {
+                    availableIngredients = fillMealFromMeal(availableIngredients, 0,2,"Carbs");
+                    fillMealFromMeal(availableIngredients, 2,1,"Sauce");
                 } else {
-                    mMeals.get(2).forceAddIngredients(mMeals.get(0).getSauce());
-                    mMeals.get(2).fillCarbs(availableIngredients);
-
-                    mMeals.get(1).forceAddIngredients(mMeals.get(2).getCarbs());
-                    mMeals.get(1).fillSauce(availableIngredients);
+                    availableIngredients = fillMealFromMeal(availableIngredients, 0,2,"Sauce");
+                    fillMealFromMeal(availableIngredients, 2,1,"Carbs");
                 }
 
                 trialCount++;
@@ -120,84 +135,77 @@ public class MealPlan {
         } else if (nbMeals == 4) {
             while (trialCount < maxTrial && !isValid()) {
                 emptyMeals();
-                List<Ingredient> availableIngredients = new ArrayList<Ingredient>(ingredients);
+                List<Ingredient> availableIngredients = fillFirstMeal(ingredients);
 
-                mMeals.get(0).fillCarbs(ingredients);
-                mMeals.get(0).fillSauce(ingredients);
-                availableIngredients.removeAll(mMeals.get(0).getIngredients());
-
-                mMeals.get(3).forceAddIngredients(mMeals.get(0).getCarbs());
-                mMeals.get(3).fillSauce(availableIngredients);
-
-                mMeals.get(1).forceAddIngredients(mMeals.get(3).getSauce());
-                mMeals.get(1).fillCarbs(availableIngredients);
-                availableIngredients.removeAll(mMeals.get(1).getCarbs());
-
-                mMeals.get(2).forceAddIngredients(mMeals.get(0).getSauce());
-                mMeals.get(2).fillCarbs(availableIngredients);
+                availableIngredients = fillMealFromMeal(availableIngredients, 0,3,"Carbs");
+                availableIngredients = fillMealFromMeal(availableIngredients, 3,1,"Sauce");
+                fillMealFromMeal(availableIngredients, 0,2,"Sauce");
 
                 trialCount++;
             }
         } else if (mNbMeals == 5) {
             while (trialCount < maxTrial && !isValid()) {
                 emptyMeals();
-                List<Ingredient> availableIngredients = new ArrayList<Ingredient>(ingredients);
+                List<Ingredient> availableIngredients = fillFirstMeal(ingredients);
 
-                mMeals.get(0).fillCarbs(ingredients);
-                mMeals.get(0).fillSauce(ingredients);
-                availableIngredients.removeAll(mMeals.get(0).getIngredients());
+                structure = rand.nextInt(3) + 1;
 
-                int structure = rand.nextInt(1);
-                if (structure == 0) {
-                    mMeals.get(4).forceAddIngredients(mMeals.get(0).getCarbs());
-                    mMeals.get(4).fillSauce(availableIngredients);
-                    availableIngredients.removeAll(mMeals.get(4).getSauce());
-
-                    mMeals.get(3).forceAddIngredients(mMeals.get(0).getSauce());
-                    mMeals.get(3).fillCarbs(availableIngredients);
-                    availableIngredients.removeAll(mMeals.get(3).getCarbs());
-
-                    mMeals.get(2).forceAddIngredients(mMeals.get(4).getSauce());
-                    mMeals.get(2).fillCarbs(availableIngredients);
-                    availableIngredients.removeAll(mMeals.get(2).getCarbs());
-
-                    mMeals.get(1).forceAddIngredients(mMeals.get(3).getCarbs());
-                    mMeals.get(1).fillSauce(availableIngredients);
-                    availableIngredients.removeAll(mMeals.get(3).getSauce());
+                if (structure == 1) {
+                    availableIngredients = fillMealFromMeal(availableIngredients, 0,4,"Carbs");
+                    availableIngredients = fillMealFromMeal(availableIngredients, 0,3,"Sauce");
+                    availableIngredients = fillMealFromMeal(availableIngredients, 4,2,"Sauce");
+                    fillMealFromMeal(availableIngredients, 3,1,"Carbs");
+                } else if (structure == 2){
+                    availableIngredients = fillMealFromMeal(availableIngredients, 0,2,"Sauce");
+                    availableIngredients = fillMealFromMeal(availableIngredients, 2,4, "Carbs");
+                    availableIngredients = fillMealFromMeal(availableIngredients, 4,1,"Sauce");
+                    fillMealFromMeal(availableIngredients, 0,3, "Carbs");
+                } else if (structure == 3){
+                    availableIngredients = fillMealFromMeal(availableIngredients, 0,2,"Carbs");
+                    availableIngredients = fillMealFromMeal(availableIngredients, 2,4, "Sauce");
+                    availableIngredients = fillMealFromMeal(availableIngredients, 4,1,"Carbs");
+                    fillMealFromMeal(availableIngredients, 0,3, "Sauce");
                 }
                 trialCount++;
             }
         } else if (mNbMeals == 6) {
             while (trialCount < maxTrial && !isValid()) {
                 emptyMeals();
-                List<Ingredient> availableIngredients = new ArrayList<Ingredient>(ingredients);
+                List<Ingredient> availableIngredients = fillFirstMeal(ingredients);
 
-                mMeals.get(0).fillIngredients(ingredients);
-                availableIngredients.removeAll(mMeals.get(0).getIngredients());
-
-                int structure = rand.nextInt(1);
-                if (structure == 0) {
-                    mMeals.get(3).forceAddIngredients(mMeals.get(0).getSauce());
-                    mMeals.get(3).fillIngredients(availableIngredients);
-                    availableIngredients.removeAll(mMeals.get(3).getCarbs());
-
-                    mMeals.get(1).forceAddIngredients(mMeals.get(3).getCarbs());
-                    mMeals.get(1).fillIngredients(availableIngredients);
-                    availableIngredients.removeAll(mMeals.get(1).getIngredients());
-
-                    mMeals.get(4).forceAddIngredients(mMeals.get(0).getCarbs());
-                    mMeals.get(4).fillIngredients(availableIngredients);
-                    availableIngredients.removeAll(mMeals.get(4).getIngredients());
-
-                    mMeals.get(2).forceAddIngredients(mMeals.get(4).getSauce());
-                    mMeals.get(2).fillIngredients(availableIngredients);
-                    availableIngredients.removeAll(mMeals.get(2).getCarbs());
+                structure = rand.nextInt(3)+1;
+                if (structure == 1) {
+                    availableIngredients = fillMealFromMeal(availableIngredients, 0,3,"Sauce");
+                    availableIngredients = fillMealFromMeal(availableIngredients, 3,1,"Carbs");
+                    availableIngredients = fillMealFromMeal(availableIngredients, 0,4,"Carbs");
+                    fillMealFromMeal(availableIngredients, 4,2,"Sauce");
 
                     mMeals.get(5).forceAddIngredients(mMeals.get(2).getCarbs());
                     mMeals.get(5).forceAddIngredients(mMeals.get(1).getSauce());
+                } else if (structure==2){
+                    availableIngredients = fillMealFromMeal(availableIngredients,0,3,"Carbs");
+                    availableIngredients = fillMealFromMeal(availableIngredients,3,1, "Sauce");
+
+                    mMeals.get(4).forceAddIngredients(mMeals.get(1).getCarbs());
+                    mMeals.get(4).forceAddIngredients(mMeals.get(0).getSauce());
+
+                    availableIngredients=fillMealFromMeal(availableIngredients,0,5, "Carbs");
+                    fillMealFromMeal(availableIngredients,5,2, "Sauce");
+
+                } else if (structure==3){
+                    availableIngredients = fillMealFromMeal(availableIngredients,0,5,"Carbs");
+                    availableIngredients = fillMealFromMeal(availableIngredients, 5,1,"Sauce");
+                    availableIngredients = fillMealFromMeal(availableIngredients,1,4,"Carbs");
+                    fillMealFromMeal(availableIngredients,0,3,"Sauce");
+
+                    mMeals.get(2).forceAddIngredients(mMeals.get(0).getCarbs());
+                    mMeals.get(2).forceAddIngredients(mMeals.get(4).getSauce());
                 }
                 trialCount++;
             }
+        }
+        if(structure != null){
+            Log.i(TAG, "makePlan: structure #" + structure);
         }
         Log.i(TAG, "makePlan: status=" + isValid() + " after " + trialCount + " trials");
         return isValid();
