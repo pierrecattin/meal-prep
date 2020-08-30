@@ -20,16 +20,9 @@ public class Logic {
     }
 
     public void generateMealPlan(int nbMeals) throws Exception {
-        String stringOut="";
-        IngredientProperties ingredientProperties = new IngredientProperties();
         MealPlan plan = new MealPlan();
-        plan.fillMeals(nbMeals, ingredients);
-        for (int i=0; i<plan.getMeals().size(); i++){
-            stringOut = stringOut + plan.getMeals().get(i).toString();
-        }
-        stringOut += "\n\n\n";
-        out.print(stringOut);
-
+        plan.makePlan(nbMeals, ingredients);
+        out.print(plan.toString());
     }
 
 }

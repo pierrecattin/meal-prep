@@ -1,7 +1,5 @@
 package com.pierrecattin.mealprep;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,7 +30,7 @@ public class Meal {
         }
 
         // Check that ingredient has a style that's shared by all ingredients
-        if(ingredient.getStyles().size()>0 & this.getStyles().size()>0){
+        if(ingredient.getStyles().size()>0 && this.getCommonStyles().size() > 0){
             Set commonStyles = ingredient.getStyles();
             commonStyles.retainAll(this.getCommonStyles());
             if (commonStyles.size()==0){
@@ -41,10 +39,11 @@ public class Meal {
         }
         // Log.i(TAG, "!!!ADDING " + ingredient.getName());
         mIngredients.add(ingredient);
-        addStyles(ingredient.getStyles());
-        // Log.i(TAG, "Styles currently in meal:");
-        // Log.i(TAG, mStyles.toString());
         return(true);
+    }
+
+    public void forceAddIngredients(Set<Ingredient> ingredients){
+        mIngredients.addAll(ingredients);
     }
 
     public List<Ingredient> filterIngredients(List<Ingredient> ingredients, String type, boolean keepType){
@@ -62,15 +61,15 @@ public class Meal {
 
     public boolean fillCarbs(List<Ingredient> ingredients) throws Exception {
         ingredients = filterIngredients(ingredients, "Carbs", true);
-        int maxTrial = 100;
+        int maxTrial = 1000;
         int trialCount = 0;
-        while (!this.typesMinAchieved("Carbs") && trialCount < maxTrial) {
+        while (!this.typesQuantityRespected("Carbs", "min") && trialCount < maxTrial) {
             Random rand = new Random();
             Ingredient newIngredient = ingredients.get(rand.nextInt(ingredients.size()));
             this.addIngredient(newIngredient);
             trialCount++;
         }
-        if (this.typesMinAchieved("Carbs")) {
+        if (this.typesQuantityRespected("Carbs", "min")) {
             return true;
         } else {
             return false;
@@ -82,13 +81,13 @@ public class Meal {
         ingredients = filterIngredients(ingredients, "Carbs", false);
         int maxTrial = 1000;
         int trialCount = 0;
-        while (!this.typesMinAchieved("All but carbs") & trialCount < maxTrial) {
+        while (!this.typesQuantityRespected("All but carbs", "min") & trialCount < maxTrial) {
             Random rand = new Random();
             Ingredient newIngredient = ingredients.get(rand.nextInt(ingredients.size()));
             this.addIngredient(newIngredient);
             trialCount++;
         }
-        if (this.typesMinAchieved("All but carbs")) {
+        if (this.typesQuantityRespected("All but carbs", "min")) {
             return true;
         } else {
             return false;
@@ -102,6 +101,26 @@ public class Meal {
         return(success);
     }
 
+    public Set<Ingredient> getCarbs(){
+        Set<Ingredient> carbs = new HashSet<Ingredient>();
+        for(Ingredient ingredient:mIngredients){
+            if(ingredient.getType().equals("Carbs")){
+                carbs.add(ingredient);
+            }
+
+        }
+        return(carbs);
+    }
+
+    public Set<Ingredient> getSauce(){
+        Set<Ingredient> sauce = new HashSet<Ingredient>();
+        for(Ingredient ingredient:mIngredients){
+            if(!ingredient.getType().equals("Carbs")){
+                sauce.add(ingredient);
+            }
+        }
+        return(sauce);
+    }
 
     public Set<Ingredient> getIngredients(){
         return(mIngredients);
@@ -119,16 +138,6 @@ public class Meal {
         return count;
     }
 
-    private void addStyles(Set<String> styles){
-        //Log.i(TAG, "addStyles: "+styles.toString());
-        for(String style : styles){
-            this.mStyles.add(style);
-        }
-        //Log.i(TAG, "Current styles"+this.mStyles);
-    }
-    public Set<String> getStyles(){
-        return(mStyles);
-    }
 
     // Finds styles that are shared by all ingredients
     public Set<String> getCommonStyles(){
@@ -150,36 +159,69 @@ public class Meal {
         return commonStyles;
     }
 
-    public boolean typesMinAchieved(String typesToCheck) throws Exception {
-        Set<String> filteredTypes = new HashSet<String>();
+    public boolean typesQuantityRespected(String typesToCheck, String direction) throws Exception {
         Constraints constraints = new Constraints();
+        Set<String> filteredTypes;
+        if(direction.equals("min")){
+            filteredTypes = new HashSet<String>(constraints.minByType.keySet());
+        } else if (direction.equals("max")){
+            filteredTypes = new HashSet<String>(constraints.maxByType.keySet());
+        } else {
+            throw new Exception("direction arg has invalid value: "+direction);
+        }
+
         if(typesToCheck.equals("All but carbs")){
-            filteredTypes = constraints.minByType.keySet();
             filteredTypes.remove("Carbs");
         } else if (typesToCheck.equals("Carbs")){
+            filteredTypes.clear();
             filteredTypes.add("Carbs");
         } else if (!typesToCheck.equals("All")){
             throw new Exception("typesToCheck arg has invalid value: "+typesToCheck);
         }
 
         for (String type:filteredTypes){
-            if (this.countType(type) < constraints.minByType.get(type)){
-                return(false);
+            if(direction.equals("min")){
+                if (this.countType(type) < constraints.minByType.get(type)){
+                    return(false);
+                }
+            } else if (direction.equals("max")){
+                if (this.countType(type) > constraints.maxByType.get(type)){
+                    return(false);
+                }
             }
         }
         return(true);
     }
 
+
+    public boolean isValid() throws Exception {
+        if(!this.typesQuantityRespected("All", "min")){
+            return false;
+        }
+
+        if(!this.typesQuantityRespected("All", "max")){
+            return false;
+        }
+        return true;
+    }
+
     public String toString(){
         String strOutput = "";
-        for(String type:IngredientProperties.types){
-            strOutput += type + ": ";
+        boolean typeHasIngredients;
+        for(String type:Constraints.minByType.keySet()){
+            typeHasIngredients = false;
             for (Ingredient ingredient : mIngredients){
                 if(ingredient.getType().equals(type)){
+                    if(!typeHasIngredients){
+                        strOutput += type + ": ";
+                        typeHasIngredients=true;
+                    }
                     strOutput += (ingredient.getName() + "; ");
                 }
             }
-            strOutput +=  "\n";
+            if(typeHasIngredients){
+                strOutput +=  "\n";
+            }
         }
         strOutput += "Style(s): ";
         strOutput += this.getCommonStyles().toString();
