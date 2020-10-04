@@ -11,11 +11,12 @@ public class Meal {
     private static final String TAG = "Meal";
     private Set<Ingredient> mIngredients =new HashSet<Ingredient>();
 
-    private Set<String> mStyles =new HashSet<String>(); // Could be deleted
 
     public Meal(){
     }
-    public boolean addIngredient(Ingredient ingredient){
+
+    // Checks if ingredients could be added without violating any Meal-Level constraint
+    public boolean isAllowed(Ingredient ingredient){
         // Check that ingredient is not already in meal
         if(mIngredients.contains(ingredient)){
             return(false);
@@ -37,15 +38,25 @@ public class Meal {
                 return(false);
             }
         }
-        // Log.i(TAG, "!!!ADDING " + ingredient.getName());
-        mIngredients.add(ingredient);
         return(true);
     }
 
+    // Add an ingredient if allowed
+    public boolean addIngredient(Ingredient ingredient){
+        if(isAllowed(ingredient)){
+            mIngredients.add(ingredient);
+            return(true);
+        } else {
+            return(false);
+        }
+    }
+
+    // Add a set of ingredients, even if it would violate constraints
     public void forceAddIngredients(Set<Ingredient> ingredients){
         mIngredients.addAll(ingredients);
     }
 
+    // get list of ingredients that have a specific type (if keepType==true), or that do not have a specific type (if !keepType)
     public List<Ingredient> filterIngredients(List<Ingredient> ingredients, String type, boolean keepType){
         List<Ingredient> filteredIngredients = new ArrayList<Ingredient>();
         for(Ingredient ingredient : ingredients){
@@ -59,6 +70,7 @@ public class Meal {
         return(filteredIngredients);
     }
 
+    // Add ingredients until enough ingredients of type Carbs are in Meal
     public boolean fillCarbs(List<Ingredient> ingredients) throws Exception {
         ingredients = filterIngredients(ingredients, "Carbs", true);
         int maxTrial = 1000;
@@ -76,7 +88,7 @@ public class Meal {
         }
     }
 
-
+    // Add ingredients until all other types than Carbs are filled
     public boolean fillSauce(List<Ingredient> ingredients) throws Exception {
         ingredients = filterIngredients(ingredients, "Carbs", false);
         int maxTrial = 1000;
@@ -94,6 +106,7 @@ public class Meal {
         }
     }
 
+    // Add ingredients until all contraints are met
     public boolean fillIngredients(List<Ingredient> ingredients) throws Exception {
         boolean success=true;
         success = success && this.fillCarbs(ingredients);
@@ -126,6 +139,7 @@ public class Meal {
         return(mIngredients);
     }
 
+    // Count number of ingredients having a given type
     public int countType(String type){
         int count=0;
         //Log.v(TAG, "countType: counting number of "+type);
@@ -159,6 +173,7 @@ public class Meal {
         return commonStyles;
     }
 
+    // Find if contraints on number of ingredients by type are respected
     public boolean typesQuantityRespected(String typesToCheck, String direction) throws Exception {
         Constraints constraints = new Constraints();
         Set<String> filteredTypes;
@@ -194,6 +209,7 @@ public class Meal {
     }
 
 
+    // Check if constraints on min/max by Ingredient type are met
     public boolean isValid() throws Exception {
         if(!this.typesQuantityRespected("All", "min")){
             return false;
