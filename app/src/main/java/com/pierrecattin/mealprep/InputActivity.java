@@ -8,14 +8,12 @@ import androidx.lifecycle.Observer;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.List;
 
 public class InputActivity extends AppCompatActivity {
-    private Button generate;
     private TextView ingredientDisplay;
     private NumberPicker numberPickerMeals;
 
@@ -41,7 +39,6 @@ public class InputActivity extends AppCompatActivity {
     private void initializeUI() {
         setContentView(R.layout.activity_input);
 
-        generate = (Button)findViewById(R.id.buttonGenerate);
         ingredientDisplay = (TextView)findViewById(R.id.textViewMealPlan);
         ingredientDisplay.setMovementMethod(new ScrollingMovementMethod());
         numberPickerMeals = findViewById(R.id.numberPickerMeals);
