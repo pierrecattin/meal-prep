@@ -1,8 +1,6 @@
 package com.pierrecattin.mealprep;
 
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -12,21 +10,15 @@ import androidx.room.PrimaryKey;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.apache.commons.lang3.StringUtils.countMatches;
 import static org.apache.commons.lang3.StringUtils.endsWith;
 import static org.apache.commons.lang3.StringUtils.remove;
 import static org.apache.commons.lang3.StringUtils.replace;
 import static org.apache.commons.lang3.StringUtils.startsWith;
-import static org.apache.commons.lang3.StringUtils.strip;
 import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringsBetween;
 
 @Entity(tableName = "ingredient_table")
 public class Ingredient {
-    @Ignore
-    private static final String TAG = "Ingredient";
-
-
     @PrimaryKey
     @NonNull
     @ColumnInfo(name="name")
