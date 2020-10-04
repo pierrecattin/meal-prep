@@ -71,6 +71,7 @@ public class MealPlan {
         }
     }
 
+    // Create Meal based on list of ingredients, return ingredients that haven't been used
     private List<Ingredient> fillFirstMeal(List<Ingredient> ingredients) throws Exception {
         List<Ingredient> availableIngredients = new ArrayList<Ingredient>(ingredients);
         mMeals.get(0).fillCarbs(ingredients);
@@ -79,7 +80,7 @@ public class MealPlan {
         return availableIngredients;
     }
 
-
+    // Copy one part of a Meal into another Meal. Return
     private List<Ingredient> fillMealFromMeal(List<Ingredient> availableIngredients, int sourceMealIndex, int targetMealIndex, String component) throws Exception {
         if(component=="Carbs"){
             mMeals.get(targetMealIndex).forceAddIngredients(mMeals.get(sourceMealIndex).getCarbs());
@@ -95,6 +96,7 @@ public class MealPlan {
         return availableIngredients;
     }
 
+    // Fill all Meals
     public boolean makePlan(int nbMeals, List<Ingredient> ingredients) throws Exception {
         mNbMeals = nbMeals;
 
@@ -211,7 +213,7 @@ public class MealPlan {
         return isValid();
     }
 
-
+    // count number of use by ingredient
     public Map<Ingredient, Integer> countIngredients() {
         Map<Ingredient, Integer> ingredientsCount = new HashMap<Ingredient, Integer>();
         for (Meal meal : mMeals) {
