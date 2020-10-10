@@ -13,43 +13,45 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class InputActivity extends AppCompatActivity {
-    private TextView ingredientDisplay;
+public class GenerateActivity extends AppCompatActivity {
+    private TextView textViewMealPlan;
     private NumberPicker numberPickerMeals;
-
-    private Logic logic;
     private IngredientViewModel mIngredientViewModel;
+    private List<Ingredient> ingredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeUI();
-        logic = new Logic(this);
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
         mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable final List<Ingredient> ingredients){
-                // Update the cached copy of the ingredients in the logic.
-                logic.setIngredients(ingredients);
+                // Update the cached copy of the ingredients
+                setIngredients(ingredients);
             }
         });
-
     }
 
     private void initializeUI() {
-        setContentView(R.layout.activity_input);
+        setContentView(R.layout.activity_generate);
 
-        ingredientDisplay = (TextView)findViewById(R.id.textViewMealPlan);
-        ingredientDisplay.setMovementMethod(new ScrollingMovementMethod());
+        textViewMealPlan = (TextView)findViewById(R.id.textViewMealPlan);
+        textViewMealPlan.setMovementMethod(new ScrollingMovementMethod());
         numberPickerMeals = findViewById(R.id.numberPickerMeals);
         numberPickerMeals.setMaxValue(6);
         numberPickerMeals.setMinValue(1);
     }
     public void generatePressed(View view) throws Exception {
-        logic.generateMealPlan(numberPickerMeals.getValue());
+        generateMealPlan(numberPickerMeals.getValue());
     }
-    public void print(String resultString){
-        ingredientDisplay.setText(resultString);
+    public void generateMealPlan(int nbMeals) throws Exception {
+        MealPlan plan = new MealPlan();
+        plan.makePlan(nbMeals, ingredients);
+        textViewMealPlan.setText(plan.toString());
     }
 
+    void setIngredients(List<Ingredient> ingredients){
+        this.ingredients = ingredients;
+    }
 }
