@@ -42,7 +42,7 @@ public class Ingredient {
         this.setName(name);
         this.setType(type);
         this.setStylesString(stylesString);
-        this.fillStylesFromString();
+        this.fillStylesFromString(stylesString);
         this.setMaxUsePerPlan(maxUsePerPlan);
         //Log.i(TAG, "Creating Ingredient "+mName+"; "+mType+"; "+this.getStyles().toString());
     }
@@ -72,24 +72,23 @@ public class Ingredient {
     }
     public Integer getMaxUsePerPlan(){ return (mMaxUsePerPlan);}
 
-    private void fillStylesFromString(){
-        if(mStylesString != null){
+    private void fillStylesFromString(String stylesString){
+        if(stylesString != null){
             //Log.i(TAG, "stylesString:"+stylesString+"---------------------------");
-            String formattedStylesString = mStylesString;
-            formattedStylesString = remove(formattedStylesString, " "); // remove all spaces
+            stylesString = remove(stylesString, " "); // remove all spaces
 
-            if(endsWith(formattedStylesString, ";")){
-                formattedStylesString = substring(formattedStylesString, 0, formattedStylesString.length()-1); // remove final ;
+            if(endsWith(stylesString, ";")){
+                stylesString = substring(stylesString, 0, stylesString.length()-1); // remove final ;
             }
-            if(startsWith(formattedStylesString, ";")){
-                formattedStylesString = substring(formattedStylesString, 1, formattedStylesString.length()); // remove initial ;
+            if(startsWith(stylesString, ";")){
+                stylesString = substring(stylesString, 1, stylesString.length()); // remove initial ;
             }
             // replace semi colons so that styles are surrounded by [ ]
-            formattedStylesString = replace(formattedStylesString, ";", "][");
-            formattedStylesString = "["+formattedStylesString+"]";
+            stylesString = replace(stylesString, ";", "][");
+            stylesString = "["+stylesString+"]";
 
             //Log.i(TAG, stylesString);
-            String[] stylesArray = substringsBetween(formattedStylesString, "[","]");
+            String[] stylesArray = substringsBetween(stylesString, "[","]");
 
             for (int i=0; i<stylesArray.length; i++){
                 this.addStyle(stylesArray[i]);
@@ -99,6 +98,7 @@ public class Ingredient {
     }
 
     public Set<String> getStyles(){
+        this.fillStylesFromString(mStylesString);
         return(mStyles);
     }
 
