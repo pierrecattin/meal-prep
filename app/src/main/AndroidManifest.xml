@@ -15,7 +15,10 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-        <activity android:name=".GenerateActivity"></activity>
+        <activity
+            android:name=".GenerateActivity"
+            android:label="@string/generate_mealplan"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

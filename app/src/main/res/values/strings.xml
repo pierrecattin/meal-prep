@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Meal Prep</string>
-    <string name="button_generate">Generate Plan</string>
-    <string name="button_goto_generate">Generate Meal Plan</string>
+    <string name="button_generate_mealplan">Generate</string>
+    <string name="generate_mealplan">Generate Meal Plan</string>
 </resources>

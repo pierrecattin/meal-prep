@@ -1,7 +1,9 @@
 package com.pierrecattin.mealprep;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.lifecycle.Observer;
 
@@ -23,6 +25,11 @@ public class GenerateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeUI();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
         mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
