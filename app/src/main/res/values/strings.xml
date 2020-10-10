@@ -2,4 +2,5 @@
     <string name="app_name">Meal Prep</string>
     <string name="button_generate_mealplan">Generate</string>
     <string name="generate_mealplan">Generate Meal Plan</string>
+    <string name="action_share">Share</string>
 </resources>

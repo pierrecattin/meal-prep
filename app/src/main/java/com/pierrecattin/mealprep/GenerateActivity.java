@@ -3,12 +3,17 @@ package com.pierrecattin.mealprep;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.lifecycle.Observer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -20,6 +25,8 @@ public class GenerateActivity extends AppCompatActivity {
     private NumberPicker numberPickerMeals;
     private IngredientViewModel mIngredientViewModel;
     private List<Ingredient> ingredients;
+    private MealPlan plan;
+    private ShareActionProvider shareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +60,26 @@ public class GenerateActivity extends AppCompatActivity {
         generateMealPlan(numberPickerMeals.getValue());
     }
     public void generateMealPlan(int nbMeals) throws Exception {
-        MealPlan plan = new MealPlan();
+        plan = new MealPlan();
         plan.makePlan(nbMeals, ingredients);
         textViewMealPlan.setText(plan.toString());
+        setShareActionIntent(plan.toString());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        shareActionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        setShareActionIntent("No plan generated");
+        return super.onCreateOptionsMenu(menu);
+    }
+    private void setShareActionIntent(String text) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        shareActionProvider.setShareIntent(intent);
     }
 
     void setIngredients(List<Ingredient> ingredients){
