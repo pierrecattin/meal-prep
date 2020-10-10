@@ -99,7 +99,6 @@ public class MealPlan {
     // Fill all Meals
     public boolean makePlan(int nbMeals, List<Ingredient> ingredients) throws Exception {
         mNbMeals = nbMeals;
-        mMeals.clear();
 
         Random rand = new Random();
         int maxTrial = 1000;
