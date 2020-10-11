@@ -25,6 +25,7 @@ public class GenerateActivity extends AppCompatActivity {
     private NumberPicker numberPickerMeals;
     private IngredientViewModel mIngredientViewModel;
     private List<Ingredient> ingredients;
+    private MealPlan plan;
     private ShareActionProvider shareActionProvider;
 
     @Override
@@ -59,7 +60,7 @@ public class GenerateActivity extends AppCompatActivity {
         generateMealPlan(numberPickerMeals.getValue());
     }
     public void generateMealPlan(int nbMeals) throws Exception {
-        MealPlan plan = new MealPlan();
+        plan = new MealPlan();
         plan.makePlan(nbMeals, ingredients);
         textViewMealPlan.setText(plan.toString());
         setShareActionIntent(plan.toString());
