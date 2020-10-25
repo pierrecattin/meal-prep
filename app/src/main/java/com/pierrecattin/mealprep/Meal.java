@@ -241,7 +241,7 @@ public class Meal {
         }
         strOutput += "Style(s): ";
         strOutput += this.getCommonStyles().toString();
-        strOutput +=  "\n\n";
+        strOutput +=  "\n";
         return(strOutput);
     }
 

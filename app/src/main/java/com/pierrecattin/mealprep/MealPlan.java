@@ -237,5 +237,9 @@ public class MealPlan {
         return asString;
     }
 
+    public List getMeals(){
+        return this.mMeals;
+    }
+
 
 }

@@ -5,18 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import java.util.List;
 
 public class MealplanActivity extends AppCompatActivity {
 
-    private TextView textViewMealPlan;
+    private RecyclerView recyclerViewMealPlan;
     private MealPlan plan;
     private ShareActionProvider shareActionProvider;
     public static final String EXTRA_NB_MEALS = "nb_meals"; // name of extra in intent that contains number of meals
@@ -43,13 +46,23 @@ public class MealplanActivity extends AppCompatActivity {
     }
     private void initializeUI() {
         setContentView(R.layout.activity_mealplan);
-        textViewMealPlan = findViewById(R.id.textViewMealPlan);
-        textViewMealPlan.setMovementMethod(new ScrollingMovementMethod());
+        recyclerViewMealPlan = findViewById(R.id.recyclerViewMealPlan);
     }
     public void generateMealPlan(int nbMeals, List ingredients) throws Exception {
         plan = new MealPlan();
         plan.makePlan(nbMeals, ingredients);
-        textViewMealPlan.setText(plan.toString());
+
+        String[] carbs = new String[nbMeals];
+        String[] sauces = new String[nbMeals];
+        for (int i=0; i<nbMeals; i++){
+            carbs[i] = plan.getMeals().get(i).toString();
+            sauces[i] = "";
+        }
+        MealCardAdapter adapter = new MealCardAdapter(carbs, sauces);
+        recyclerViewMealPlan.setAdapter(adapter);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recyclerViewMealPlan.setLayoutManager(layoutManager);
+
         setShareActionIntent(plan.toString());
     }
 
