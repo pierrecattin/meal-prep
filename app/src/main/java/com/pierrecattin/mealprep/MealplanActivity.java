@@ -6,12 +6,10 @@ import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -51,18 +49,18 @@ public class MealplanActivity extends AppCompatActivity {
     public void generateMealPlan(int nbMeals, List ingredients) throws Exception {
         plan = new MealPlan();
         plan.makePlan(nbMeals, ingredients);
-
         String[] carbs = new String[nbMeals];
         String[] sauces = new String[nbMeals];
         for (int i=0; i<nbMeals; i++){
-            carbs[i] = plan.getMeals().get(i).toString();
-            sauces[i] = "";
+            Meal currentMeal = (Meal)plan.getMeals().get(i);
+            carbs[i] = currentMeal.printComponent("carbs");
+            carbs[i] += "\n";
+            sauces[i] = currentMeal.printComponent("sauce");
         }
         MealCardAdapter adapter = new MealCardAdapter(carbs, sauces);
         recyclerViewMealPlan.setAdapter(adapter);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerViewMealPlan.setLayoutManager(layoutManager);
-
         setShareActionIntent(plan.toString());
     }
 

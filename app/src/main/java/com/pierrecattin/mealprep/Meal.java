@@ -221,27 +221,31 @@ public class Meal {
         return true;
     }
 
-    public String toString(){
+    public String printComponent(String component){
         String strOutput = "";
-        boolean typeHasIngredients;
-        for(String type:Constraints.minByType.keySet()){
-            typeHasIngredients = false;
-            for (Ingredient ingredient : mIngredients){
-                if(ingredient.getType().equals(type)){
-                    if(!typeHasIngredients){
-                        strOutput += type + ": ";
-                        typeHasIngredients=true;
-                    }
-                    strOutput += (ingredient.getName() + "; ");
-                }
-            }
-            if(typeHasIngredients){
-                strOutput +=  "\n";
+
+        Set<Ingredient> ingredientsSubset;
+        if(component == "carbs"){
+            ingredientsSubset = getCarbs();
+        } else {
+            ingredientsSubset = getSauce();
+        }
+
+        Iterator itr = ingredientsSubset.iterator();
+        while(itr.hasNext()){
+            strOutput += itr.next().toString();
+            if(itr.hasNext()){
+                strOutput += "\n";
             }
         }
-        strOutput += "Style(s): ";
-        strOutput += this.getCommonStyles().toString();
-        strOutput +=  "\n";
+        return(strOutput);
+    }
+
+    public String toString(){
+        String strOutput = printComponent("carbs");
+        strOutput += "\n";
+        strOutput += printComponent("sauce");
+        strOutput += "\n";
         return(strOutput);
     }
 

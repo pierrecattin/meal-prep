@@ -108,11 +108,7 @@ public class Ingredient implements Serializable {
     }
 
     public String toString(){
-        if(mStyles.size()==0){
-            return(mName +"; "+ mType);
-        } else {
-            return(mName +"; "+ mType +"; " + mStyles.toString());
-        }
+        return(mName);
     }
 
 }
