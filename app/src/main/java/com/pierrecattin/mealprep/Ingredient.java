@@ -7,6 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringsBetween;
 
 @Entity(tableName = "ingredient_table")
-public class Ingredient {
+public class Ingredient implements Serializable {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name="name")
