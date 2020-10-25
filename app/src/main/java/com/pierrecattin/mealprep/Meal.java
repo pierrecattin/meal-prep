@@ -1,5 +1,6 @@
 package com.pierrecattin.mealprep;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class Meal {
+public class Meal implements Serializable {
     private static final String TAG = "Meal";
     private Set<Ingredient> mIngredients =new HashSet<Ingredient>();
 
@@ -243,7 +244,7 @@ public class Meal {
 
     public String toString(){
         String strOutput = printComponent("carbs");
-        strOutput += "\n";
+        strOutput += "\n\n";
         strOutput += printComponent("sauce");
         strOutput += "\n";
         return(strOutput);

@@ -3,6 +3,7 @@ package com.pierrecattin.mealprep;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class MealPlan {
+public class MealPlan  implements Serializable {
     private static final String TAG = "MealPlan";
     private List<Meal> mMeals = new ArrayList<Meal>();
     private int mNbMeals;
@@ -232,6 +233,7 @@ public class MealPlan {
         String asString = "";
         for (int i = 0; i < mMeals.size(); i++) {
             asString = asString + mMeals.get(i).toString();
+            asString += "\n\n";
         }
 
         return asString;
@@ -239,6 +241,10 @@ public class MealPlan {
 
     public List getMeals(){
         return this.mMeals;
+    }
+
+    public int length(){
+        return mNbMeals;
     }
 
 
