@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.NumberPicker;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -55,6 +55,8 @@ public class GenerateActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MealplanActivity.class);
         intent.putExtra(MealplanActivity.EXTRA_PLAN, plan);
+        intent.putExtra(MealplanActivity.EXTRA_INGREDIENTS, (Serializable) ingredients);
+        intent.putExtra(MealplanActivity.EXTRA_NBMEALS, numberPickerMeals.getValue());
         startActivity(intent);
     }
 

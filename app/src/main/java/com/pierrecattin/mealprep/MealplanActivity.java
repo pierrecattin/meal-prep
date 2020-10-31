@@ -10,15 +10,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.util.List;
 
 public class MealplanActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewMealPlan;
     private ShareActionProvider shareActionProvider;
     public static final String EXTRA_PLAN = "plan"; // name of extra in intent that contains number of mealplan
-    public MealPlan plan;
+    public static final String EXTRA_INGREDIENTS = "ingredients";
+    public static final String EXTRA_NBMEALS = "nbMeals";
+
+    private MealPlan plan;
+    private List<Ingredient> ingredients;
+    private int nbMeals;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +38,22 @@ public class MealplanActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
         Intent intent = getIntent();
         plan = (MealPlan) intent.getSerializableExtra(this.EXTRA_PLAN);
+        nbMeals = intent.getIntExtra(this.EXTRA_NBMEALS, plan.length());
+        ingredients = (List)intent.getSerializableExtra(this.EXTRA_INGREDIENTS);
         displayMealPlan();
-
     }
     private void initializeUI() {
         setContentView(R.layout.activity_mealplan);
         recyclerViewMealPlan = findViewById(R.id.recyclerViewMealPlan);
+    }
+
+    public void generatePressed(View view) throws Exception {
+        plan = new MealPlan();
+        plan.makePlan(nbMeals, ingredients);
+        displayMealPlan();
+        setShareActionIntent(plan.toString());
     }
     public void displayMealPlan() {
         String[] carbs = new String[plan.length()];
@@ -49,7 +66,13 @@ public class MealplanActivity extends AppCompatActivity {
         }
         MealCardAdapter adapter = new MealCardAdapter(carbs, sauces);
         recyclerViewMealPlan.setAdapter(adapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        int RecyclerViewNbColumns;
+        if(plan.length()==1){
+            RecyclerViewNbColumns = 1;
+        } else{
+            RecyclerViewNbColumns = 2;
+        }
+        GridLayoutManager layoutManager = new GridLayoutManager(this, RecyclerViewNbColumns);
         recyclerViewMealPlan.setLayoutManager(layoutManager);
     }
 
