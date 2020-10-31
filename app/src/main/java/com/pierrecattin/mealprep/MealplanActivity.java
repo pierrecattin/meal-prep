@@ -39,11 +39,22 @@ public class MealplanActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
-        plan = (MealPlan) intent.getSerializableExtra(this.EXTRA_PLAN);
+        if(savedInstanceState == null){
+            plan = (MealPlan) intent.getSerializableExtra(this.EXTRA_PLAN);
+        } else {
+            plan = (MealPlan) savedInstanceState.getSerializable("plan");
+        }
         nbMeals = intent.getIntExtra(this.EXTRA_NBMEALS, plan.length());
         ingredients = (List)intent.getSerializableExtra(this.EXTRA_INGREDIENTS);
         displayMealPlan();
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable("plan", plan);
+    }
+
     private void initializeUI() {
         setContentView(R.layout.activity_mealplan);
         recyclerViewMealPlan = findViewById(R.id.recyclerViewMealPlan);

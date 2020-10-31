@@ -21,7 +21,6 @@ public class GenerateActivity extends AppCompatActivity {
     private NumberPicker numberPickerMeals;
     private List<Ingredient> ingredients;
     private IngredientViewModel mIngredientViewModel;
-    private MealPlan plan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +39,8 @@ public class GenerateActivity extends AppCompatActivity {
                 setIngredients(ingredients);
             }
         });
-
     }
+
 
     private void initializeUI() {
         setContentView(R.layout.activity_generate);
@@ -50,7 +49,7 @@ public class GenerateActivity extends AppCompatActivity {
         numberPickerMeals.setMinValue(1);
     }
     public void generatePressed(View view) throws Exception {
-        plan = new MealPlan();
+        MealPlan plan = new MealPlan();
         plan.makePlan(numberPickerMeals.getValue(), ingredients);
 
         Intent intent = new Intent(this, MealplanActivity.class);
