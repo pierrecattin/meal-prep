@@ -9,10 +9,11 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_main" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMealPlan"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <fragment
+        android:id="@+id/MealPlanFragment"
+        android:name="com.pierrecattin.mealprep.MealPlanViewFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="30dp"
@@ -20,7 +21,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        android:scrollbars="vertical"/>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
