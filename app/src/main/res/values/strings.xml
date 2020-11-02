@@ -5,4 +5,5 @@
     <string name="regenerate_mealplan">Generate new plan</string>
     <string name="view_mealplan">Meal Plan</string>
     <string name="action_share">Share</string>
+    <string name="toast_generation_error">Cannot generate valid plan</string>
 </resources>

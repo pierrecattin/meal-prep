@@ -14,7 +14,9 @@ import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class MealplanActivity extends AppCompatActivity {
@@ -62,9 +64,14 @@ public class MealplanActivity extends AppCompatActivity {
 
     public void generatePressed(View view) throws Exception {
         plan = new MealPlan();
-        plan.makePlan(nbMeals, ingredients);
-        displayMealPlan();
-        setShareActionIntent(plan.toString());
+
+        if(plan.makePlan(nbMeals, ingredients)){
+            displayMealPlan();
+            setShareActionIntent(plan.toString());
+        } else {
+            Toast toast = Toast.makeText(this, R.string.toast_generation_error, Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
     public void displayMealPlan() {
         String[] carbs = new String[plan.length()];

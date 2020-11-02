@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.List;
@@ -50,13 +51,16 @@ public class GenerateActivity extends AppCompatActivity {
     }
     public void generatePressed(View view) throws Exception {
         MealPlan plan = new MealPlan();
-        plan.makePlan(numberPickerMeals.getValue(), ingredients);
-
-        Intent intent = new Intent(this, MealplanActivity.class);
-        intent.putExtra(MealplanActivity.EXTRA_PLAN, plan);
-        intent.putExtra(MealplanActivity.EXTRA_INGREDIENTS, (Serializable) ingredients);
-        intent.putExtra(MealplanActivity.EXTRA_NBMEALS, numberPickerMeals.getValue());
-        startActivity(intent);
+        if(plan.makePlan(numberPickerMeals.getValue(), ingredients)){
+            Intent intent = new Intent(this, MealplanActivity.class);
+            intent.putExtra(MealplanActivity.EXTRA_PLAN, plan);
+            intent.putExtra(MealplanActivity.EXTRA_INGREDIENTS, (Serializable) ingredients);
+            intent.putExtra(MealplanActivity.EXTRA_NBMEALS, numberPickerMeals.getValue());
+            startActivity(intent);
+        } else {
+            Toast toast = Toast.makeText(this, R.string.toast_generation_error, Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     public void setIngredients(List ingredients){
