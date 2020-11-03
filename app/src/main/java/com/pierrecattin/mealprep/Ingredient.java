@@ -111,4 +111,36 @@ public class Ingredient implements Serializable {
         return(mName);
     }
 
+    @Override
+    public boolean equals(Object other){
+        if(other instanceof Ingredient){
+            Ingredient otherIngredient = (Ingredient)other;
+            return(otherIngredient.getName().equals(this.getName()) &&
+                    otherIngredient.getStylesString().equals(this.getStylesString()) &&
+                    otherIngredient.getType().equals(this.getType())&&
+                    otherIngredient.getMaxUsePerPlan().equals(this.getMaxUsePerPlan()));
+        } else{
+            return false;
+        }
+    }
+
+    @Override
+    public final int hashCode() {
+        int result = 17;
+        if (mName != null) {
+            result = 31 * result + mName.hashCode();
+        }
+        if (mStylesString != null) {
+            result = 31 * result + mStylesString.hashCode();
+        }
+        if (mType != null) {
+            result = 31 * result + mType.hashCode();
+        }
+
+        if (mMaxUsePerPlan != null) {
+            result = 31 * result + mMaxUsePerPlan.hashCode();
+        }
+        return result;
+    }
+
 }
