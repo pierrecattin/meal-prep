@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAddRequiredIngredient"
         app:layout_constraintEnd_toStartOf="@+id/buttonGenerate"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +36,27 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/numberPickerMeals"
         app:layout_constraintTop_toTopOf="@+id/numberPickerMeals" />
+
+    <Button
+        android:id="@+id/buttonAddRequiredIngredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="addRequiredIngredientPressed"
+        android:text="@string/button_add_required_ingredient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/numberPickerMeals"
+        app:layout_constraintBottom_toTopOf="@+id/MealPlanFragment" />
+
+    <fragment
+        android:id="@+id/MealPlanFragment"
+        android:name="com.pierrecattin.mealprep.IngredientListFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAddRequiredIngredient" />
 
 
 

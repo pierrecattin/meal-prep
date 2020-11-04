@@ -68,6 +68,16 @@ public class GenerateActivity extends AppCompatActivity {
         }
     }
 
+
+    public void addRequiredIngredientPressed(View view){
+        /*IngredientListFragment frag = (IngredientListFragment)
+                getSupportFragmentManager().findFragmentById(R.id.MealPlanFragment);
+        List<Ingredient> requiredIngredients = new ArrayList<>();
+        requiredIngredients.add(ingredients.get(0));
+        frag.setIngredients(requiredIngredients);*/
+    }
+
+
     public void setIngredients(List ingredients){
         this.ingredients = ingredients;
     }
