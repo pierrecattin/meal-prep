@@ -15,6 +15,7 @@ public class MealPlan  implements Serializable {
     private static final String TAG = "MealPlan";
     private List<Meal> mMeals = new ArrayList<Meal>();
     private int mNbMeals;
+    List<Ingredient> mRequiredIngredients;
 
     public MealPlan() {
     }
@@ -62,6 +63,14 @@ public class MealPlan  implements Serializable {
             }
         }
 
+        // requiredIngredients are present
+        itr = mRequiredIngredients.iterator();
+        while(itr.hasNext()){
+            Ingredient requiredIngredient = (Ingredient)itr.next();
+            if(!ingredientsCount.containsKey(requiredIngredient)){
+                return false;
+            }
+        }
         return true;
     }
 
@@ -98,11 +107,11 @@ public class MealPlan  implements Serializable {
     }
 
     // Fill all Meals
-    public boolean makePlan(int nbMeals, List<Ingredient> ingredients) throws Exception {
+    public boolean makePlan(int nbMeals, List<Ingredient> ingredients, List<Ingredient> requiredIngredients) throws Exception {
         mNbMeals = nbMeals;
-
+        mRequiredIngredients = requiredIngredients;
         Random rand = new Random();
-        int maxTrial = 100;
+        int maxTrial = 600;
         int trialCount = 0;
         Integer structure = null;
 

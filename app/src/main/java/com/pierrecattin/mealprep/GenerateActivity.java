@@ -10,11 +10,13 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,10 +53,13 @@ public class GenerateActivity extends AppCompatActivity {
     }
     public void generatePressed(View view) throws Exception {
         MealPlan plan = new MealPlan();
-        if(plan.makePlan(numberPickerMeals.getValue(), ingredients)){
+        List<Ingredient> requiredIngredients = new ArrayList<Ingredient>();
+        //requiredIngredients.add(ingredients.get(0));
+        if(plan.makePlan(numberPickerMeals.getValue(), ingredients, requiredIngredients)){
             Intent intent = new Intent(this, MealplanActivity.class);
             intent.putExtra(MealplanActivity.EXTRA_PLAN, plan);
             intent.putExtra(MealplanActivity.EXTRA_INGREDIENTS, (Serializable) ingredients);
+            intent.putExtra(MealplanActivity.EXTRA_REQUIRED_INGREDIENTS, (Serializable) requiredIngredients);
             intent.putExtra(MealplanActivity.EXTRA_NBMEALS, numberPickerMeals.getValue());
             startActivity(intent);
         } else {

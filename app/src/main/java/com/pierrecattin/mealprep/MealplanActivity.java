@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,10 +26,12 @@ public class MealplanActivity extends AppCompatActivity {
     private ShareActionProvider shareActionProvider;
     public static final String EXTRA_PLAN = "plan"; // name of extra in intent that contains number of mealplan
     public static final String EXTRA_INGREDIENTS = "ingredients";
+    public static final String EXTRA_REQUIRED_INGREDIENTS = "required_ingredients";
     public static final String EXTRA_NBMEALS = "nbMeals";
 
     private MealPlan plan;
     private List<Ingredient> ingredients;
+    private List<Ingredient> requiredIngredients;
     private int nbMeals;
 
 
@@ -48,6 +51,7 @@ public class MealplanActivity extends AppCompatActivity {
         }
         nbMeals = intent.getIntExtra(this.EXTRA_NBMEALS, plan.length());
         ingredients = (List)intent.getSerializableExtra(this.EXTRA_INGREDIENTS);
+        requiredIngredients = (List)intent.getSerializableExtra(this.EXTRA_REQUIRED_INGREDIENTS);
         displayMealPlan();
     }
 
@@ -65,7 +69,8 @@ public class MealplanActivity extends AppCompatActivity {
     public void generatePressed(View view) throws Exception {
         plan = new MealPlan();
 
-        if(plan.makePlan(nbMeals, ingredients)){
+
+        if(plan.makePlan(nbMeals, ingredients, requiredIngredients)){
             displayMealPlan();
             setShareActionIntent(plan.toString());
         } else {

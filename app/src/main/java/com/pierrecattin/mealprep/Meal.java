@@ -74,7 +74,7 @@ public class Meal implements Serializable {
     // Add ingredients until enough ingredients of type Carbs are in Meal
     public boolean fillCarbs(List<Ingredient> ingredients) throws Exception {
         ingredients = filterIngredients(ingredients, "Carbs", true);
-        int maxTrial = 40;
+        int maxTrial = 30;
         int trialCount = 0;
         while (!this.typesQuantityRespected("Carbs", "min") && trialCount < maxTrial) {
             Random rand = new Random();
@@ -92,7 +92,7 @@ public class Meal implements Serializable {
     // Add ingredients until all other types than Carbs are filled
     public boolean fillSauce(List<Ingredient> ingredients) throws Exception {
         ingredients = filterIngredients(ingredients, "Carbs", false);
-        int maxTrial = 40;
+        int maxTrial = 30;
         int trialCount = 0;
         while (!this.typesQuantityRespected("All but carbs", "min") & trialCount < maxTrial) {
             Random rand = new Random();
