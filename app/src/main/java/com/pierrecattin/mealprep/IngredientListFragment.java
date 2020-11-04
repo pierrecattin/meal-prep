@@ -50,16 +50,20 @@ public class IngredientListFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //String[] names = new String[ingredients.size()];
-        String[] names = new String[5];
-        for (int i = 0; i < names.length; i++) {
-            //names[i] = ingredients.get(i).getName();
-            names[i] = "ingredient "+i;
+        String[] names;
+        if(ingredients!=null){
+            names = new String[ingredients.size()];
+            for (int i = 0; i < names.length; i++) {
+                names[i] = ingredients.get(i).getName();
+            }
+        } else {
+            names = new String[0];
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 inflater.getContext(), android.R.layout.simple_list_item_1,
                 names);
         setListAdapter(adapter);
+
         //return inflater.inflate(R.layout.fragment_ingredient_list, container, false);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
