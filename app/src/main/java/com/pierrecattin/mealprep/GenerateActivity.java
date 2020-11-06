@@ -20,11 +20,13 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class GenerateActivity extends AppCompatActivity {
     private NumberPicker numberPickerMeals;
     private List<Ingredient> ingredients;
+    private List<Ingredient> requiredIngredients = new ArrayList<Ingredient>();
     private IngredientViewModel mIngredientViewModel;
     private IngredientListAdapter adapter;
 
@@ -61,8 +63,6 @@ public class GenerateActivity extends AppCompatActivity {
     }
     public void generatePressed(View view) throws Exception {
         MealPlan plan = new MealPlan();
-        List<Ingredient> requiredIngredients = new ArrayList<Ingredient>();
-        //requiredIngredients.add(ingredients.get(0));
         if(plan.makePlan(numberPickerMeals.getValue(), ingredients, requiredIngredients)){
             Intent intent = new Intent(this, MealplanActivity.class);
             intent.putExtra(MealplanActivity.EXTRA_PLAN, plan);
@@ -78,11 +78,10 @@ public class GenerateActivity extends AppCompatActivity {
 
 
     public void addRequiredIngredientPressed(View view){
-
-        //List ingredientList = new ArrayList();
-        //ingredientList.add(ingredients.get(0));
-        //adapter.setIngredients(ingredientList);
-        adapter.addIngredient(ingredients.get(0));
+        Random rand = new Random();
+        Ingredient newRequiredIngredient = ingredients.get(rand.nextInt(ingredients.size()-1));
+        requiredIngredients.add(newRequiredIngredient);
+        adapter.addIngredient(newRequiredIngredient);
     }
 
 
