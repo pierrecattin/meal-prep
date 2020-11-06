@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ public class GenerateActivity extends AppCompatActivity {
     private NumberPicker numberPickerMeals;
     private List<Ingredient> ingredients;
     private IngredientViewModel mIngredientViewModel;
+    private IngredientListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,11 @@ public class GenerateActivity extends AppCompatActivity {
                 setIngredients(ingredients);
             }
         });
+
+        RecyclerView excludedIngredientsRecyclerView = findViewById(R.id.excludedIngredientsRecyclerView);
+        adapter = new IngredientListAdapter(this);
+        excludedIngredientsRecyclerView.setAdapter(adapter);
+        excludedIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
@@ -70,11 +78,11 @@ public class GenerateActivity extends AppCompatActivity {
 
 
     public void addRequiredIngredientPressed(View view){
-        /*IngredientListFragment frag = (IngredientListFragment)
-                getSupportFragmentManager().findFragmentById(R.id.MealPlanFragment);
-        List<Ingredient> requiredIngredients = new ArrayList<>();
-        requiredIngredients.add(ingredients.get(0));
-        frag.setIngredients(requiredIngredients);*/
+
+        //List ingredientList = new ArrayList();
+        //ingredientList.add(ingredients.get(0));
+        //adapter.setIngredients(ingredientList);
+        adapter.addIngredient(ingredients.get(0));
     }
 
 
