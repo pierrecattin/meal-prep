@@ -78,10 +78,12 @@ public class GenerateActivity extends AppCompatActivity {
 
 
     public void addRequiredIngredientPressed(View view){
-        Random rand = new Random();
-        Ingredient newRequiredIngredient = ingredients.get(rand.nextInt(ingredients.size()-1));
-        requiredIngredients.add(newRequiredIngredient);
-        adapter.addIngredient(newRequiredIngredient);
+        Intent intent = new Intent(this, PickIngredientActivity.class);
+        intent.putExtra(MealplanActivity.EXTRA_INGREDIENTS, (Serializable) ingredients);
+        startActivity(intent);
+
+        //requiredIngredients.add(newRequiredIngredient);
+        //adapter.addIngredient(newRequiredIngredient);
     }
 
 

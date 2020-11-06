@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Meal Prep</string>
     <string name="button_generate_mealplan">Generate</string>
-    <string name ="button_add_required_ingredient">Add required ingredient</string>
+    <string name="button_add_required_ingredient">Add required ingredient</string>
     <string name="generate_mealplan">Generate Meal Plan</string>
     <string name="regenerate_mealplan">Generate new plan</string>
     <string name="view_mealplan">Meal Plan</string>
+    <string name="pick_ingredient">Pick Ingredient</string>
     <string name="action_share">Share</string>
     <string name="toast_generation_error">Cannot generate valid plan</string>
 </resources>
