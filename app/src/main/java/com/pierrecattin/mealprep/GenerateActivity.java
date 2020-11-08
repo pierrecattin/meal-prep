@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class GenerateActivity extends AppCompatActivity {
+public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
     private NumberPicker numberPickerMeals;
     private List<Ingredient> ingredients;
     private List<Ingredient> requiredIngredients = new ArrayList<Ingredient>();

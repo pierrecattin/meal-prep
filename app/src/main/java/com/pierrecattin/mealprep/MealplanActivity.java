@@ -20,7 +20,7 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.List;
 
-public class MealplanActivity extends AppCompatActivity {
+public class MealplanActivity extends LifecycleLoggingAppCompatActivity {
 
     private RecyclerView recyclerViewMealPlan;
     private ShareActionProvider shareActionProvider;
