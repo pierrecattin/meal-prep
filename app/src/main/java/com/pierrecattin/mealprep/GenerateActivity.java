@@ -33,7 +33,16 @@ public class GenerateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeUI();
+        setContentView(R.layout.activity_generate);
+
+        numberPickerMeals = findViewById(R.id.numberPickerMeals);
+        numberPickerMeals.setMaxValue(6);
+        numberPickerMeals.setMinValue(1);
+
+        if(savedInstanceState != null){
+            numberPickerMeals.setValue(savedInstanceState.getInt("numberPickerMealsValue"));
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -53,20 +62,24 @@ public class GenerateActivity extends AppCompatActivity {
         excludedIngredientsRecyclerView.setAdapter(adapter);
         excludedIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
-
-    private void initializeUI() {
-        setContentView(R.layout.activity_generate);
-        numberPickerMeals = findViewById(R.id.numberPickerMeals);
-        numberPickerMeals.setMaxValue(6);
-        numberPickerMeals.setMinValue(1);
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("numberPickerMealsValue",numberPickerMeals.getValue());
     }
+
     public void generatePressed(View view) throws Exception {
         MealPlan plan = new MealPlan();
+        List ingredientsAvailable = ingredients;
+        //ingredientsAvailable.remove(10);
+        requiredIngredients = new ArrayList<>();
+        //requiredIngredients.add(ingredients.get(3));
+
+
         if(plan.makePlan(numberPickerMeals.getValue(), ingredients, requiredIngredients)){
             Intent intent = new Intent(this, MealplanActivity.class);
             intent.putExtra(MealplanActivity.EXTRA_PLAN, plan);
-            intent.putExtra(MealplanActivity.EXTRA_INGREDIENTS, (Serializable) ingredients);
+            intent.putExtra(MealplanActivity.EXTRA_INGREDIENTS, (Serializable) ingredientsAvailable);
             intent.putExtra(MealplanActivity.EXTRA_REQUIRED_INGREDIENTS, (Serializable) requiredIngredients);
             intent.putExtra(MealplanActivity.EXTRA_NBMEALS, numberPickerMeals.getValue());
             startActivity(intent);
