@@ -143,4 +143,14 @@ public abstract class LifecycleLoggingAppCompatActivity
         super.onDestroy();
         Log.d(TAG, "onDestroy() - the activity is about to be destroyed");
     }
+
+    /**
+     * Hook method called  when activity's state is saved
+     * @param savedInstanceState object that contains saved state information.
+     */
+    @Override
+    protected void    onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.d(TAG, "onSaveInstanceState() - The activity's instance state is saved");
+    }
 }
