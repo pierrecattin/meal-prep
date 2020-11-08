@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PickIngredientActivity extends AppCompatActivity {
@@ -37,6 +37,14 @@ public class PickIngredientActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ingredients = (List)intent.getSerializableExtra(this.EXTRA_INGREDIENTS);
         adapter.setIngredients(ingredients);
+
+        adapter.setListener(new IngredientListAdapter.Listener() {
+            @Override
+            public void onClick(int position) {
+                //Toast toast = Toast.makeText(this, "ingredient position:", Toast.LENGTH_LONG);
+                Log.i("PickIngredientActivity", "onClick: position="+position);
+            }
+        });
 
     }
 }

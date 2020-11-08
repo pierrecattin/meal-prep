@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
     private final LayoutInflater inflater;
     private List<Ingredient> ingredients;
+    private Listener listener;
 
     IngredientListAdapter(Context context) { inflater = LayoutInflater.from(context); }
 
@@ -24,10 +26,20 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
     }
 
     @Override
-    public void onBindViewHolder(IngredientViewHolder holder, int position) {
+    public void onBindViewHolder(IngredientViewHolder holder, final int position) {
         if (ingredients != null) {
             Ingredient current = ingredients.get(position);
             holder.ingredientItemView.setText(current.getName());
+            View itemView = holder.itemView;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onClick(position);
+                    }
+                }
+            });
+
         } else {
             // Covers the case of data not being ready yet.
             holder.ingredientItemView.setText("No Ingredient");
@@ -67,6 +79,11 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
             ingredientItemView = itemView.findViewById(R.id.textView);
         }
     }
-
+    interface Listener {
+        void onClick(int position);
+    }
+    public void setListener(Listener listener){
+        this.listener = listener;
+    }
 
 }
