@@ -5,11 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
@@ -48,6 +48,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
     void setIngredients(List<Ingredient> ingredients){
         this.ingredients = ingredients;
+        sortIngredients();
         notifyDataSetChanged();
     }
 
@@ -58,8 +59,13 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
             setIngredients(ingredientList);
         } else {
             ingredients.add(ingredient);
+            sortIngredients();
             notifyDataSetChanged();
         }
+    }
+
+    private void sortIngredients(){
+        Collections.sort(ingredients);
     }
 
     // getItemCount() is called many times, and when it is first called,

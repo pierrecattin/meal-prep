@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringsBetween;
 
 @Entity(tableName = "ingredient_table")
-public class Ingredient implements Serializable {
+public class Ingredient implements Serializable, Comparable {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name="name")
@@ -141,6 +141,15 @@ public class Ingredient implements Serializable {
             result = 31 * result + mMaxUsePerPlan.hashCode();
         }
         return result;
+    }
+    @Override
+    public int compareTo(Object otherObject) {
+        if(otherObject instanceof Ingredient){
+            Ingredient otherIngredient = (Ingredient)otherObject;
+            return(this.getName().compareTo(otherIngredient.getName()));
+        } else {
+            return (-1);
+        }
     }
 
 }
