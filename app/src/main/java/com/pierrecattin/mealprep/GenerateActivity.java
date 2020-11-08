@@ -3,7 +3,6 @@ package com.pierrecattin.mealprep;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
@@ -29,6 +27,7 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
     private List<Ingredient> requiredIngredients = new ArrayList<Ingredient>();
     private IngredientViewModel mIngredientViewModel;
     private IngredientListAdapter adapter;
+    public static final String EXTRA_REQUIRED_INGREDIENT = "required_ingredient";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +38,17 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
         numberPickerMeals.setMaxValue(6);
         numberPickerMeals.setMinValue(1);
 
+        Intent intent = getIntent();
+        Ingredient newRequiredIngredient = (Ingredient)intent.getSerializableExtra(this.EXTRA_REQUIRED_INGREDIENT);
+        if(newRequiredIngredient != null){
+            this.requiredIngredients.add(newRequiredIngredient);
+        }
+
         if(savedInstanceState != null){
             numberPickerMeals.setValue(savedInstanceState.getInt("numberPickerMealsValue"));
+            this.requiredIngredients = (List)savedInstanceState.getSerializable("requiredIngredients");
         }
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,24 +64,25 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
             }
         });
 
-        RecyclerView excludedIngredientsRecyclerView = findViewById(R.id.excludedIngredientsRecyclerView);
+        RecyclerView requiredIngredientsRecyclerView = findViewById(R.id.requiredIngredientsRecyclerView);
         adapter = new IngredientListAdapter(this);
-        excludedIngredientsRecyclerView.setAdapter(adapter);
-        excludedIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if(requiredIngredients!=null && requiredIngredients.size()>0){
+            adapter.setIngredients(requiredIngredients);
+        }
+        requiredIngredientsRecyclerView.setAdapter(adapter);
+        requiredIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("numberPickerMealsValue",numberPickerMeals.getValue());
+        savedInstanceState.putSerializable("requiredIngredients",(Serializable)requiredIngredients);
     }
 
     public void generatePressed(View view) throws Exception {
         MealPlan plan = new MealPlan();
         List ingredientsAvailable = ingredients;
         //ingredientsAvailable.remove(10);
-        requiredIngredients = new ArrayList<>();
-        //requiredIngredients.add(ingredients.get(3));
-
 
         if(plan.makePlan(numberPickerMeals.getValue(), ingredients, requiredIngredients)){
             Intent intent = new Intent(this, MealplanActivity.class);

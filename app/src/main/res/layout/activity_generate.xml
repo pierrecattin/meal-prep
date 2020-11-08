@@ -46,11 +46,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/numberPickerMeals"
-        app:layout_constraintBottom_toTopOf="@+id/excludedIngredientsRecyclerView" />
+        app:layout_constraintBottom_toTopOf="@+id/requiredIngredientsRecyclerView" />
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/excludedIngredientsRecyclerView"
+        android:id="@+id/requiredIngredientsRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,8 +42,11 @@ public class PickIngredientActivity extends AppCompatActivity {
         adapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                //Toast toast = Toast.makeText(this, "ingredient position:", Toast.LENGTH_LONG);
-                Log.i("PickIngredientActivity", "onClick: position="+position);
+                Log.i("PickIngredientActivity", "onClick: clicked "+ingredients.get(position));
+                //Intent intent = new Intent();
+                Intent intent = new Intent(getBaseContext(), GenerateActivity.class);
+                intent.putExtra(GenerateActivity.EXTRA_REQUIRED_INGREDIENT, ingredients.get(position));
+                startActivity(intent);
             }
         });
 
