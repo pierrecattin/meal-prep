@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -70,7 +71,13 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
             adapter.setIngredients(requiredIngredients);
         }
         requiredIngredientsRecyclerView.setAdapter(adapter);
-        requiredIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        int RecyclerViewNbColumns;
+        if(requiredIngredients==null || requiredIngredients.size()<=1){
+            RecyclerViewNbColumns = 1;
+        } else{
+            RecyclerViewNbColumns = 2;
+        }
+        requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, RecyclerViewNbColumns));
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {

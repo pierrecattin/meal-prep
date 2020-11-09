@@ -3,6 +3,7 @@ package com.pierrecattin.mealprep;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +34,8 @@ public class PickIngredientActivity extends AppCompatActivity {
         RecyclerView ingredientsRecyclerView = findViewById(R.id.ingredientsRecyclerView);
         IngredientListAdapter adapter = new IngredientListAdapter(this);
         ingredientsRecyclerView.setAdapter(adapter);
-        ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ingredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
 
         Intent intent = getIntent();
         ingredients = (List)intent.getSerializableExtra(this.EXTRA_INGREDIENTS);
