@@ -82,7 +82,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
         private IngredientViewHolder(View itemView) {
             super(itemView);
-            ingredientItemView = itemView.findViewById(R.id.textView);
+            ingredientItemView = itemView.findViewById(R.id.ingredientTextView);
         }
     }
     interface Listener {

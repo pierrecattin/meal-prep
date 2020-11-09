@@ -44,8 +44,6 @@ public class PickIngredientActivity extends AppCompatActivity {
         adapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                Log.i("PickIngredientActivity", "onClick: clicked "+ingredients.get(position));
-                //Intent intent = new Intent();
                 Intent intent = new Intent(getBaseContext(), GenerateActivity.class);
                 intent.putExtra(GenerateActivity.EXTRA_REQUIRED_INGREDIENT, ingredients.get(position));
                 startActivity(intent);
