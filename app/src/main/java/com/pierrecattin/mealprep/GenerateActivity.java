@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -27,7 +26,10 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
     private List<Ingredient> ingredients;
     private List<Ingredient> requiredIngredients = new ArrayList<Ingredient>();
     private IngredientViewModel mIngredientViewModel;
-    private IngredientListAdapter adapter;
+    private IngredientListAdapter requiredIngredientsAdapter;
+
+    private RecyclerView requiredIngredientsRecyclerView;
+
     public static final String EXTRA_REQUIRED_INGREDIENT = "required_ingredient";
 
     @Override
@@ -39,17 +41,9 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
         numberPickerMeals.setMaxValue(6);
         numberPickerMeals.setMinValue(1);
 
-        Intent intent = getIntent();
-        Ingredient newRequiredIngredient = (Ingredient)intent.getSerializableExtra(this.EXTRA_REQUIRED_INGREDIENT);
-        if(newRequiredIngredient != null){
-            this.requiredIngredients.add(newRequiredIngredient);
-        }
-
         if(savedInstanceState != null){
             numberPickerMeals.setValue(savedInstanceState.getInt("numberPickerMealsValue"));
-            this.requiredIngredients = (List)savedInstanceState.getSerializable("requiredIngredients");
         }
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,19 +58,16 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
             }
         });
 
-        RecyclerView requiredIngredientsRecyclerView = findViewById(R.id.requiredIngredientsRecyclerView);
-        adapter = new IngredientListAdapter(this);
-        if(requiredIngredients!=null && requiredIngredients.size()>0){
-            adapter.setIngredients(requiredIngredients);
-        }
-        requiredIngredientsRecyclerView.setAdapter(adapter);
-        int RecyclerViewNbColumns;
-        if(requiredIngredients==null || requiredIngredients.size()<=1){
-            RecyclerViewNbColumns = 1;
-        } else{
-            RecyclerViewNbColumns = 2;
-        }
-        requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, RecyclerViewNbColumns));
+        requiredIngredientsAdapter = new IngredientListAdapter(this);
+        requiredIngredientsRecyclerView = findViewById(R.id.requiredIngredientsRecyclerView);
+        mIngredientViewModel.getRequiredIngredients().observe(this, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable final List<Ingredient> requiredIngredients) {
+                // Update the cached copy of the ingredients
+                setRequiredIngredients(requiredIngredients);
+                updateRequiredIngredientsView();
+            }
+        });
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -116,5 +107,23 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
 
     public void setIngredients(List ingredients){
         this.ingredients = ingredients;
+    }
+    public void setRequiredIngredients(List requiredIngredients){
+        if(requiredIngredients.size()>0)
+        this.requiredIngredients = requiredIngredients;
+    }
+
+    private void updateRequiredIngredientsView(){
+        if(requiredIngredients!=null && requiredIngredients.size()>0){
+            requiredIngredientsAdapter.setIngredients(requiredIngredients);
+        }
+        requiredIngredientsRecyclerView.setAdapter(requiredIngredientsAdapter);
+        int RecyclerViewNbColumns;
+        if(requiredIngredients==null || requiredIngredients.size()<=1){
+            RecyclerViewNbColumns = 1;
+        } else{
+            RecyclerViewNbColumns = 2;
+        }
+        requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, RecyclerViewNbColumns));
     }
 }

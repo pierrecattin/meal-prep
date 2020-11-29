@@ -30,28 +30,33 @@ ingredients$styles_string <- concatenate_styles(ingredients[,4:ncol(ingredients)
 
 ingredients <- 
   ingredients %>%
-  select(name, type, styles_string,  max_use_per_plan)
+  select(name, type, styles_string,  max_use_per_plan) %>%
+  mutate(is_required=0)
 
 
-dbExecute(conn, "DROP TABLE ingredient_table")
+dbExecute(conn, "DROP TABLE ingredients")
 # dbExecute(conn, "DROP TABLE temp")
 dbWriteTable(conn, name="temp", value=ingredients, overwrite=TRUE)
 dbExecute(conn, 
-          "CREATE TABLE [ingredient_table] (
+          "CREATE TABLE [ingredients] (
           name TEXT PRIMARY KEY NOT NULL, 
-          type TEXT NOT NULL, styles_string TEXT, 
-          max_use_per_plan INTEGER NOT NULL);")
+          type TEXT NOT NULL, 
+          styles_string TEXT, 
+          max_use_per_plan INTEGER NOT NULL,
+          is_required INTEGER NOT NULL);") # Room does not support boolean. Integer will be converted to boolean in java
 dbExecute(conn, 
-          "INSERT INTO ingredient_table (
+          "INSERT INTO ingredients (
             name,
             type,
             styles_string,
-            max_use_per_plan
+            max_use_per_plan,
+            is_required
           )
           SELECT name,
           type,
           styles_string,
-          max_use_per_plan
+          max_use_per_plan,
+          is_required
           FROM temp;")
 dbExecute(conn,          
           "DROP TABLE temp;")

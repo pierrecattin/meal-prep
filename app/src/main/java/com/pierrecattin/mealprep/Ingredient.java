@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.startsWith;
 import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringsBetween;
 
-@Entity(tableName = "ingredient_table")
+@Entity(tableName = "ingredients")
 public class Ingredient implements Serializable, Comparable {
     @PrimaryKey
     @NonNull
@@ -36,15 +36,20 @@ public class Ingredient implements Serializable, Comparable {
     @ColumnInfo(name="max_use_per_plan")
     private Integer mMaxUsePerPlan;
 
+    @NonNull
+    @ColumnInfo(name="is_required")
+    private boolean mRequired;
+
     @Ignore
     private Set<String> mStyles = new HashSet<String>();
 
-    public Ingredient(@NonNull String name, @NonNull String type, String stylesString, @NonNull int maxUsePerPlan){
+    public Ingredient(@NonNull String name, @NonNull String type, String stylesString, @NonNull int maxUsePerPlan, boolean required){
         this.setName(name);
         this.setType(type);
         this.setStylesString(stylesString);
         this.fillStylesFromString(stylesString);
         this.setMaxUsePerPlan(maxUsePerPlan);
+        this.setRequired(required);
         //Log.i(TAG, "Creating Ingredient "+mName+"; "+mType+"; "+this.getStyles().toString());
     }
 
@@ -61,6 +66,9 @@ public class Ingredient implements Serializable, Comparable {
     private void setMaxUsePerPlan(Integer maxUsePerPlan) {
         mMaxUsePerPlan = maxUsePerPlan;
     }
+    public void setRequired(boolean required){
+        mRequired = required;
+    }
 
     public String getName(){
         return(mName);
@@ -72,6 +80,7 @@ public class Ingredient implements Serializable, Comparable {
         return(mStylesString);
     }
     public Integer getMaxUsePerPlan(){ return (mMaxUsePerPlan);}
+    public boolean getRequired(){ return (mRequired);}
 
     private void fillStylesFromString(String stylesString){
         if(stylesString != null){

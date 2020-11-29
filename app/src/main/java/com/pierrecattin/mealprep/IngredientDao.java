@@ -13,9 +13,23 @@ public interface IngredientDao {
     @Insert
     void insert(Ingredient ingredient);
 
-    @Query("DELETE FROM ingredient_table")
+    @Query("DELETE FROM ingredients")
     void deleteAll();
 
-    @Query("SELECT * from ingredient_table")
+    @Query("SELECT * from ingredients")
     LiveData<List<Ingredient>> getAllIngredients();
+
+    @Query("SELECT * from ingredients where name=:name")
+    LiveData<List<Ingredient>> getByName(String name);
+
+    @Query("SELECT * from ingredients where is_required")
+    LiveData<List<Ingredient>> getRequired();
+
+	//TODO:replace by update https://developer.android.com/codelabs/android-training-room-delete-data?index=..%2F..%2Fandroid-training#8
+    @Query("UPDATE ingredients SET is_required = 1 where name=:name")
+    void makeRequired(String name);
+
+    @Query("UPDATE ingredients SET is_required = 0 where name=:name")
+    void makeNotRequired(String name);
+
 }
