@@ -25,7 +25,7 @@ public interface IngredientDao {
     @Query("SELECT * from ingredients where is_required")
     LiveData<List<Ingredient>> getRequired();
 
-	//TODO:replace by update https://developer.android.com/codelabs/android-training-room-delete-data?index=..%2F..%2Fandroid-training#8
+	// TODO:replace by update https://developer.android.com/codelabs/android-training-room-delete-data?index=..%2F..%2Fandroid-training#8
     @Query("UPDATE ingredients SET is_required = 1 where name=:name")
     void makeRequired(String name);
 

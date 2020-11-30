@@ -20,7 +20,9 @@ import static org.apache.commons.lang3.StringUtils.substringsBetween;
 
 @Entity(tableName = "ingredients")
 public class Ingredient implements Serializable, Comparable {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @NonNull
     @ColumnInfo(name="name")
     private String mName;
@@ -50,10 +52,25 @@ public class Ingredient implements Serializable, Comparable {
         this.fillStylesFromString(stylesString);
         this.setMaxUsePerPlan(maxUsePerPlan);
         this.setRequired(required);
-        //Log.i(TAG, "Creating Ingredient "+mName+"; "+mType+"; "+this.getStyles().toString());
     }
 
 
+
+    @Ignore     // https://developer.android.com/codelabs/android-training-room-delete-data?index=..%2F..%2Fandroid-training#8
+    public Ingredient(int id, @NonNull String name, @NonNull String type, String stylesString, @NonNull int maxUsePerPlan, boolean required){
+        this.id=id;
+        this.setName(name);
+        this.setType(type);
+        this.setStylesString(stylesString);
+        this.fillStylesFromString(stylesString);
+        this.setMaxUsePerPlan(maxUsePerPlan);
+        this.setRequired(required);
+    }
+
+
+    public void setId(int id){
+        this.id = id;
+    }
     public void setName(String name){
         mName = name;
     }
@@ -70,6 +87,9 @@ public class Ingredient implements Serializable, Comparable {
         mRequired = required;
     }
 
+    public int getId(){
+        return(id);
+    }
     public String getName(){
         return(mName);
     }
@@ -124,7 +144,8 @@ public class Ingredient implements Serializable, Comparable {
     public boolean equals(Object other){
         if(other instanceof Ingredient){
             Ingredient otherIngredient = (Ingredient)other;
-            return(otherIngredient.getName().equals(this.getName()) &&
+            return(otherIngredient.getId()==this.getId() &&
+                    otherIngredient.getName().equals(this.getName()) &&
                     otherIngredient.getStylesString().equals(this.getStylesString()) &&
                     otherIngredient.getType().equals(this.getType())&&
                     otherIngredient.getMaxUsePerPlan().equals(this.getMaxUsePerPlan()));
@@ -136,6 +157,9 @@ public class Ingredient implements Serializable, Comparable {
     @Override
     public final int hashCode() {
         int result = 17;
+
+        result = 31 * result + id;
+
         if (mName != null) {
             result = 31 * result + mName.hashCode();
         }
