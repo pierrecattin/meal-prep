@@ -63,9 +63,15 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
         mIngredientViewModel.getRequiredIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable final List<Ingredient> requiredIngredients) {
-                // Update the cached copy of the ingredients
                 setRequiredIngredients(requiredIngredients);
                 updateRequiredIngredientsView();
+            }
+        });
+
+        requiredIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
+            @Override
+            public void onClick(int position) {
+                removeRequiredIngredient(requiredIngredients.get(position));
             }
         });
     }
@@ -113,6 +119,11 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
         this.requiredIngredients = requiredIngredients;
     }
 
+    private void removeRequiredIngredient(Ingredient ingredient){
+        ingredient.setRequired(false);
+        mIngredientViewModel.update(ingredient);
+        updateRequiredIngredientsView();
+    }
     private void updateRequiredIngredientsView(){
         if(requiredIngredients!=null && requiredIngredients.size()>0){
             requiredIngredientsAdapter.setIngredients(requiredIngredients);
