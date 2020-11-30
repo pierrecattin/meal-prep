@@ -17,6 +17,8 @@ public class PickIngredientActivity extends AppCompatActivity {
     public static final String EXTRA_INGREDIENTS = "ingredients";
     List<Ingredient> ingredients;
     private IngredientViewModel mIngredientViewModel;
+    RecyclerView ingredientsRecyclerView;
+    IngredientListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +32,17 @@ public class PickIngredientActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        RecyclerView ingredientsRecyclerView = findViewById(R.id.ingredientsRecyclerView);
-        IngredientListAdapter adapter = new IngredientListAdapter(this);
+        ingredientsRecyclerView = findViewById(R.id.ingredientsRecyclerView);
+        adapter = new IngredientListAdapter(this);
+
         ingredientsRecyclerView.setAdapter(adapter);
         ingredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
 
         Intent intent = getIntent();
         ingredients = (List)intent.getSerializableExtra(this.EXTRA_INGREDIENTS);
-        adapter.setIngredients(ingredients);
+
+        updateRecyclerView();
 
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
         adapter.setListener(new IngredientListAdapter.Listener() {
@@ -57,5 +61,12 @@ public class PickIngredientActivity extends AppCompatActivity {
          toast.show();
          ingredient.setRequired(true);
          mIngredientViewModel.update(ingredient);
+
+         ingredients.remove(ingredient);
+         updateRecyclerView();
+    }
+
+    void updateRecyclerView(){
+        adapter.setIngredients(ingredients);
     }
 }
