@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -25,11 +26,7 @@ public interface IngredientDao {
     @Query("SELECT * from ingredients where is_required")
     LiveData<List<Ingredient>> getRequired();
 
-	// TODO:replace by update https://developer.android.com/codelabs/android-training-room-delete-data?index=..%2F..%2Fandroid-training#8
-    @Query("UPDATE ingredients SET is_required = 1 where name=:name")
-    void makeRequired(String name);
-
-    @Query("UPDATE ingredients SET is_required = 0 where name=:name")
-    void makeNotRequired(String name);
+    @Update
+    void update(Ingredient... ingredient);
 
 }

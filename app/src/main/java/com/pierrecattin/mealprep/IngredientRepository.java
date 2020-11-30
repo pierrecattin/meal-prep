@@ -29,6 +29,9 @@ public class IngredientRepository {
         new insertAsyncTask(mIngredientDao).execute(ingredient);
     }
 
+    public void update(Ingredient ingredient)  {
+        new updateIngredientAsyncTask(mIngredientDao).execute(ingredient);
+    }
     private static class insertAsyncTask extends AsyncTask<Ingredient, Void, Void> {
         private IngredientDao mAsyncTaskDao;
         insertAsyncTask(IngredientDao dao){
@@ -42,24 +45,17 @@ public class IngredientRepository {
         }
     }
 
-    private static class makeRequiredAsyncTask extends AsyncTask<Ingredient, Void, Void> {
+    private static class updateIngredientAsyncTask extends AsyncTask<Ingredient, Void, Void> {
         private IngredientDao mAsyncTaskDao;
 
-        makeRequiredAsyncTask(IngredientDao dao) {
+        updateIngredientAsyncTask(IngredientDao dao) {
             mAsyncTaskDao = dao;
         }
 
         @Override
         protected Void doInBackground(final Ingredient... params) {
-            mAsyncTaskDao.makeRequired(params[0].getName());
+            mAsyncTaskDao.update(params[0]);
             return null;
         }
     }
-    public void makeRequired(Ingredient ingredient)  {
-        new makeRequiredAsyncTask(mIngredientDao).execute(ingredient);
-    }
-
-
-
-
 }

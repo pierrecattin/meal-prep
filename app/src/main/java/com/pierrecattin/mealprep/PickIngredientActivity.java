@@ -55,6 +55,7 @@ public class PickIngredientActivity extends AppCompatActivity {
      void addRequiredIngredient(Ingredient ingredient){
          Toast toast = Toast.makeText(this, "New required ingredient: "+ingredient.toString(), Toast.LENGTH_LONG);
          toast.show();
-         mIngredientViewModel.makeRequired(ingredient);
+         ingredient.setRequired(true);
+         mIngredientViewModel.update(ingredient);
     }
 }

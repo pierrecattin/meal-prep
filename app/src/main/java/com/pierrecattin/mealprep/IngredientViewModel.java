@@ -31,6 +31,6 @@ public class IngredientViewModel extends AndroidViewModel {
         mRepository.insert(ingredient);
     }
 
-    public void makeRequired(Ingredient ingredient) {mRepository.makeRequired(ingredient);}
+    public void update(Ingredient ingredient) {mRepository.update(ingredient);}
 
 }
