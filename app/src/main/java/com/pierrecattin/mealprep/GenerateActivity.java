@@ -115,19 +115,21 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
         this.ingredients = ingredients;
     }
     public void setRequiredIngredients(List requiredIngredients){
-        if(requiredIngredients.size()>0)
-        this.requiredIngredients = requiredIngredients;
+        if(requiredIngredients.size()>0){
+            this.requiredIngredients = requiredIngredients;
+        } else{
+            this.requiredIngredients.clear();
+        }
     }
 
     private void removeRequiredIngredient(Ingredient ingredient){
+        this.requiredIngredients.remove(ingredient);
         ingredient.setRequired(false);
         mIngredientViewModel.update(ingredient);
         updateRequiredIngredientsView();
     }
     private void updateRequiredIngredientsView(){
-        if(requiredIngredients!=null && requiredIngredients.size()>0){
-            requiredIngredientsAdapter.setIngredients(requiredIngredients);
-        }
+        requiredIngredientsAdapter.setIngredients(requiredIngredients);
         requiredIngredientsRecyclerView.setAdapter(requiredIngredientsAdapter);
         int RecyclerViewNbColumns;
         if(requiredIngredients==null || requiredIngredients.size()<=1){

@@ -47,10 +47,15 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
     }
 
     void setIngredients(List<Ingredient> ingredients){
-        this.ingredients = ingredients;
-        sortIngredients();
+        if(ingredients!=null) {
+            this.ingredients = ingredients;
+            sortIngredients();
+        } else {
+            this.ingredients.clear();
+        }
         notifyDataSetChanged();
     }
+
 
     void addIngredient(Ingredient ingredient){
         if(ingredients == null){
