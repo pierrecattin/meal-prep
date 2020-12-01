@@ -103,11 +103,7 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
 
     public void addRequiredIngredientPressed(View view){
         Intent intent = new Intent(this, PickIngredientActivity.class);
-        intent.putExtra(MealplanActivity.EXTRA_INGREDIENTS, (Serializable) ingredients);
         startActivity(intent);
-
-        //requiredIngredients.add(newRequiredIngredient);
-        //adapter.addIngredient(newRequiredIngredient);
     }
 
 

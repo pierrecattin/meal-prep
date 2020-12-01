@@ -12,12 +12,14 @@ public class IngredientViewModel extends AndroidViewModel {
     private IngredientRepository mRepository;
     private LiveData<List<Ingredient>> mAllIngredients;
     private LiveData<List<Ingredient>> mRequiredIngredients;
+    private LiveData<List<Ingredient>> mNotRequiredIngredients;
 
     public IngredientViewModel(Application application) {
         super(application);
         mRepository=new IngredientRepository(application);
         mAllIngredients=mRepository.getAllIngredients();
         mRequiredIngredients=mRepository.getRequiredIngredients();
+        mNotRequiredIngredients=mRepository.getNotRequiredIngredients();
     }
 
     LiveData<List<Ingredient>> getAllIngredients(){
@@ -25,6 +27,9 @@ public class IngredientViewModel extends AndroidViewModel {
     }
     LiveData<List<Ingredient>> getRequiredIngredients(){
         return mRequiredIngredients;
+    }
+    LiveData<List<Ingredient>> getNotRequiredIngredients(){
+        return mNotRequiredIngredients;
     }
 
     public void insert(Ingredient ingredient){

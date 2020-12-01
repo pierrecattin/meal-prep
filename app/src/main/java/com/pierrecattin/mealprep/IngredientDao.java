@@ -23,8 +23,8 @@ public interface IngredientDao {
     @Query("SELECT * from ingredients where name=:name")
     LiveData<List<Ingredient>> getByName(String name);
 
-    @Query("SELECT * from ingredients where is_required")
-    LiveData<List<Ingredient>> getRequired();
+    @Query("SELECT * from ingredients where is_required=:required")
+    LiveData<List<Ingredient>> getByRequired(boolean required);
 
     @Update
     void update(Ingredient... ingredient);

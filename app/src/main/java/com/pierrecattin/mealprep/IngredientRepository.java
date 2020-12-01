@@ -11,11 +11,13 @@ public class IngredientRepository {
     private IngredientDao mIngredientDao;
     private LiveData<List<Ingredient>> mAllIngredients;
     private LiveData<List<Ingredient>> mRequiredIngredients;
+    private LiveData<List<Ingredient>> mNotRequiredIngredients;
     IngredientRepository(Application application){
         IngredientRoomDatabase db = IngredientRoomDatabase.getDatabase(application);
         mIngredientDao = db.ingredientDao();
         mAllIngredients = mIngredientDao.getAllIngredients();
-        mRequiredIngredients = mIngredientDao.getRequired();
+        mRequiredIngredients = mIngredientDao.getByRequired(true);
+        mNotRequiredIngredients = mIngredientDao.getByRequired(false);
     }
 
     LiveData<List<Ingredient>>getAllIngredients(){
@@ -23,6 +25,9 @@ public class IngredientRepository {
     }
     LiveData<List<Ingredient>>getRequiredIngredients(){
         return mRequiredIngredients;
+    }
+    LiveData<List<Ingredient>>getNotRequiredIngredients(){
+        return mNotRequiredIngredients;
     }
 
     public void insert (Ingredient ingredient){

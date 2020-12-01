@@ -1,8 +1,10 @@
 package com.pierrecattin.mealprep;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,11 +16,13 @@ import android.widget.Toast;
 import java.util.List;
 
 public class PickIngredientActivity extends AppCompatActivity {
-    public static final String EXTRA_INGREDIENTS = "ingredients";
-    List<Ingredient> ingredients;
+    private List<Ingredient> availableIngredients;
+    private List<Ingredient> requiredIngredients;
     private IngredientViewModel mIngredientViewModel;
-    RecyclerView ingredientsRecyclerView;
-    IngredientListAdapter adapter;
+    private RecyclerView availableIngredientsRecyclerView;
+    private RecyclerView requiredIngredientsRecyclerView;
+    private IngredientListAdapter availableIngredientsAdapter;
+    private IngredientListAdapter requiredIngredientsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,41 +36,63 @@ public class PickIngredientActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        ingredientsRecyclerView = findViewById(R.id.ingredientsRecyclerView);
-        adapter = new IngredientListAdapter(this);
+        availableIngredientsRecyclerView = findViewById(R.id.availableIngredientsRecyclerView);
+        requiredIngredientsRecyclerView = findViewById(R.id.requiredIngredientsRecyclerView);
+        availableIngredientsAdapter = new IngredientListAdapter(this);
+        requiredIngredientsAdapter = new IngredientListAdapter(this);
 
-        ingredientsRecyclerView.setAdapter(adapter);
-        ingredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-
-        Intent intent = getIntent();
-        ingredients = (List)intent.getSerializableExtra(this.EXTRA_INGREDIENTS);
-
-        updateRecyclerView();
-
+        availableIngredientsRecyclerView.setAdapter(availableIngredientsAdapter);
+        availableIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
-        adapter.setListener(new IngredientListAdapter.Listener() {
+        updateLocalIngredientsFromDB();
+        availableIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                addRequiredIngredient(ingredients.get(position));
-
-
-
+                addRequiredIngredient(availableIngredients.get(position));
             }
         });
 
     }
-     void addRequiredIngredient(Ingredient ingredient){
+
+    private void addRequiredIngredient(Ingredient ingredient){
          Toast toast = Toast.makeText(this, "New required ingredient: "+ingredient.toString(), Toast.LENGTH_LONG);
          toast.show();
          ingredient.setRequired(true);
          mIngredientViewModel.update(ingredient);
 
-         ingredients.remove(ingredient);
-         updateRecyclerView();
+         availableIngredients.remove(ingredient);
+         updateRecyclerViews();
     }
 
-    void updateRecyclerView(){
-        adapter.setIngredients(ingredients);
+    private void  updateLocalIngredientsFromDB(){
+        mIngredientViewModel.getNotRequiredIngredients().observe(this, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable final List<Ingredient> notRequiredIngredients) {
+                availableIngredients = notRequiredIngredients;
+                updateRecyclerViews();
+            }
+        });
+        mIngredientViewModel.getRequiredIngredients().observe(this, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable final List<Ingredient> requiredIngredients) {
+                setRequiredIngredients(requiredIngredients);
+            }
+        });
+    }
+
+    private void setRequiredIngredients(List<Ingredient> requiredIngredients){
+        if(requiredIngredients!=null){
+            this.requiredIngredients = requiredIngredients;
+        }
+
+    }
+
+    private void updateRecyclerViews(){
+        if(availableIngredients != null){
+            availableIngredientsAdapter.setIngredients(availableIngredients);
+        }
+        if(requiredIngredients != null ){
+            //requiredIngredientsAdapter.setIngredients(requiredIngredients);
+        }
     }
 }
