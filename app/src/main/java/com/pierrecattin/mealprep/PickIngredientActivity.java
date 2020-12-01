@@ -42,7 +42,10 @@ public class PickIngredientActivity extends AppCompatActivity {
         requiredIngredientsAdapter = new IngredientListAdapter(this);
 
         availableIngredientsRecyclerView.setAdapter(availableIngredientsAdapter);
+        requiredIngredientsRecyclerView.setAdapter(requiredIngredientsAdapter);
         availableIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
         updateLocalIngredientsFromDB();
         availableIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
@@ -74,25 +77,20 @@ public class PickIngredientActivity extends AppCompatActivity {
         });
         mIngredientViewModel.getRequiredIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
-            public void onChanged(@Nullable final List<Ingredient> requiredIngredients) {
-                setRequiredIngredients(requiredIngredients);
+            public void onChanged(@Nullable final List<Ingredient> reqIngredients) {
+                requiredIngredients = reqIngredients;
+                updateRecyclerViews();
             }
         });
     }
 
-    private void setRequiredIngredients(List<Ingredient> requiredIngredients){
-        if(requiredIngredients!=null){
-            this.requiredIngredients = requiredIngredients;
-        }
-
-    }
 
     private void updateRecyclerViews(){
         if(availableIngredients != null){
             availableIngredientsAdapter.setIngredients(availableIngredients);
         }
         if(requiredIngredients != null ){
-            //requiredIngredientsAdapter.setIngredients(requiredIngredients);
+            requiredIngredientsAdapter.setIngredients(requiredIngredients);
         }
     }
 }
