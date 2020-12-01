@@ -45,7 +45,7 @@ public class PickIngredientActivity extends AppCompatActivity {
         requiredIngredientsRecyclerView.setAdapter(requiredIngredientsAdapter);
         availableIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-        
+
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
         updateLocalIngredientsFromDB();
         availableIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
@@ -55,7 +55,27 @@ public class PickIngredientActivity extends AppCompatActivity {
             }
         });
 
+        requiredIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
+            @Override
+            public void onClick(int position) {
+                removeRequiredIngredient(requiredIngredients.get(position));
+            }
+        });
+
     }
+
+
+    private void removeRequiredIngredient(Ingredient ingredient){
+        Toast toast = Toast.makeText(this, "Removing required ingredient: "+ingredient.toString(), Toast.LENGTH_LONG);
+        toast.show();
+        ingredient.setRequired(false);
+        mIngredientViewModel.update(ingredient);
+
+        availableIngredients.remove(ingredient);
+        updateRecyclerViews();
+    }
+
+
 
     private void addRequiredIngredient(Ingredient ingredient){
          Toast toast = Toast.makeText(this, "New required ingredient: "+ingredient.toString(), Toast.LENGTH_LONG);
