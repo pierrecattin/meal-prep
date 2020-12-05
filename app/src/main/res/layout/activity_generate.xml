@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonAddRequiredIngredient"
+        app:layout_constraintBottom_toTopOf="@+id/buttonManageIngredients"
         app:layout_constraintEnd_toStartOf="@+id/buttonGenerate"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,11 +38,11 @@
         app:layout_constraintTop_toTopOf="@+id/numberPickerMeals" />
 
     <Button
-        android:id="@+id/buttonAddRequiredIngredient"
+        android:id="@+id/buttonManageIngredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="addRequiredIngredientPressed"
-        android:text="@string/button_add_required_ingredient"
+        android:onClick="manageIngredientsPressed"
+        android:text="@string/manage_ingredients"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/numberPickerMeals"
@@ -55,7 +55,7 @@
         android:text="@string/required_ingredients"
         tools:layout_editor_absoluteX="5dp"
         tools:layout_editor_absoluteY="225dp"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAddRequiredIngredient"
+        app:layout_constraintTop_toBottomOf="@+id/buttonManageIngredients"
         app:layout_constraintBottom_toTopOf="@+id/requiredIngredientsRecyclerView"
         app:layout_constraintStart_toStartOf="@+id/requiredIngredientsRecyclerView"
         app:layout_constraintEnd_toEndOf="@+id/requiredIngredientsRecyclerView"

@@ -22,7 +22,7 @@
             android:label="@string/view_mealplan"
             android:parentActivityName=".GenerateActivity" />
         <activity
-            android:name=".PickIngredientActivity"
+            android:name=".ManageIngredientsActivity"
             android:label="@string/pick_ingredient"
             android:parentActivityName=".GenerateActivity"
             />

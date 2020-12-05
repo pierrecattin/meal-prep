@@ -9,13 +9,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import java.util.List;
 
-public class PickIngredientActivity extends AppCompatActivity {
+public class ManageIngredientsActivity extends AppCompatActivity {
     private List<Ingredient> availableIngredients;
     private List<Ingredient> requiredIngredients;
     private List<Ingredient> forbiddenIngredients;
@@ -33,7 +32,7 @@ public class PickIngredientActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pick_ingredient);
+        setContentView(R.layout.activity_manage_ingredients);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
