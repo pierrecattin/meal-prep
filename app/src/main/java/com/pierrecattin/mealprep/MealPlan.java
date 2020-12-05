@@ -111,7 +111,7 @@ public class MealPlan  implements Serializable {
         mNbMeals = nbMeals;
         mRequiredIngredients = requiredIngredients;
         Random rand = new Random();
-        int maxTrial = 600;
+        int maxTrial = 5000;
         int trialCount = 0;
         Integer structure = null;
 
