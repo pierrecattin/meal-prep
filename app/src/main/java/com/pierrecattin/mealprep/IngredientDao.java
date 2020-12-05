@@ -26,6 +26,9 @@ public interface IngredientDao {
     @Query("SELECT * from ingredients where is_required=:required")
     LiveData<List<Ingredient>> getByRequired(boolean required);
 
+    @Query("SELECT * from ingredients where is_forbidden=:forbidden")
+    LiveData<List<Ingredient>> getByForbidden(boolean forbidden);
+
     @Update
     void update(Ingredient... ingredient);
 

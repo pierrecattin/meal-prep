@@ -32,6 +32,7 @@ ingredients <-
   ingredients %>%
   select(name, type, styles_string,  max_use_per_plan) %>%
   mutate(is_required=0,
+         is_forbidden=0,
          id=1:nrow(ingredients)) 
 
 
@@ -45,15 +46,17 @@ dbExecute(conn,
           type TEXT NOT NULL, 
           styles_string TEXT, 
           max_use_per_plan INTEGER NOT NULL,
-          is_required INTEGER NOT NULL);") # Room does not support boolean. Integer will be converted to boolean in java
+          is_required INTEGER NOT NULL,
+          is_forbidden INTEGER NOT NULL);") # Room does not support boolean. Integer will be converted to boolean in java
 dbExecute(conn, 
           "INSERT INTO ingredients (
-            id,
-            name,
-            type,
-            styles_string,
-            max_use_per_plan,
-            is_required
+          id,
+          name,
+          type,
+          styles_string,
+          max_use_per_plan,
+          is_required,
+          is_forbidden
           )
           SELECT 
           id,
@@ -61,7 +64,8 @@ dbExecute(conn,
           type,
           styles_string,
           max_use_per_plan,
-          is_required
+          is_required,
+          is_forbidden
           FROM temp;")
 dbExecute(conn,          
           "DROP TABLE temp;")

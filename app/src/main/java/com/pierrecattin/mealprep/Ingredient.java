@@ -42,6 +42,10 @@ public class Ingredient implements Serializable, Comparable {
     @ColumnInfo(name="is_required")
     private boolean mRequired;
 
+    @NonNull
+    @ColumnInfo(name="is_forbidden")
+    private boolean mForbidden;
+
     @Ignore
     private Set<String> mStyles = new HashSet<String>();
 
@@ -86,6 +90,9 @@ public class Ingredient implements Serializable, Comparable {
     public void setRequired(boolean required){
         mRequired = required;
     }
+    public void setForbidden(boolean forbidden){
+        mForbidden = forbidden;
+    }
 
     public int getId(){
         return(id);
@@ -101,6 +108,8 @@ public class Ingredient implements Serializable, Comparable {
     }
     public Integer getMaxUsePerPlan(){ return (mMaxUsePerPlan);}
     public boolean getRequired(){ return (mRequired);}
+    public boolean getForbidden(){ return (mForbidden);}
+
 
     private void fillStylesFromString(String stylesString){
         if(stylesString != null){
