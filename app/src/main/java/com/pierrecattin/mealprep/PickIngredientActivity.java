@@ -18,17 +18,21 @@ import java.util.List;
 public class PickIngredientActivity extends AppCompatActivity {
     private List<Ingredient> availableIngredients;
     private List<Ingredient> requiredIngredients;
+    private List<Ingredient> forbiddenIngredients;
+
     private IngredientViewModel mIngredientViewModel;
     private RecyclerView availableIngredientsRecyclerView;
     private RecyclerView requiredIngredientsRecyclerView;
+    private RecyclerView forbiddenIngredientsRecyclerView;
+
     private IngredientListAdapter availableIngredientsAdapter;
     private IngredientListAdapter requiredIngredientsAdapter;
+    private IngredientListAdapter forbiddenIngredientsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_pick_ingredient);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -38,57 +42,80 @@ public class PickIngredientActivity extends AppCompatActivity {
 
         availableIngredientsRecyclerView = findViewById(R.id.availableIngredientsRecyclerView);
         requiredIngredientsRecyclerView = findViewById(R.id.requiredIngredientsRecyclerView);
+        forbiddenIngredientsRecyclerView = findViewById(R.id.forbiddenIngredientsRecyclerView);
         availableIngredientsAdapter = new IngredientListAdapter(this);
         requiredIngredientsAdapter = new IngredientListAdapter(this);
+        forbiddenIngredientsAdapter = new IngredientListAdapter(this);
 
         availableIngredientsRecyclerView.setAdapter(availableIngredientsAdapter);
         requiredIngredientsRecyclerView.setAdapter(requiredIngredientsAdapter);
+        forbiddenIngredientsRecyclerView.setAdapter(forbiddenIngredientsAdapter);
+
         availableIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        forbiddenIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
         updateLocalIngredientsFromDB();
+
+        forbiddenIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
+            @Override
+            public void onClick(int position) {
+                toggleIngredientForbidden(forbiddenIngredients.get(position));
+            }
+        });
+
         availableIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                addRequiredIngredient(availableIngredients.get(position));
+                toggleIngredientForbidden(availableIngredients.get(position));
             }
         });
 
         requiredIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                removeRequiredIngredient(requiredIngredients.get(position));
+                toggleIngredientRequired(requiredIngredients.get(position));
             }
         });
 
     }
 
 
-    private void removeRequiredIngredient(Ingredient ingredient){
-        Toast toast = Toast.makeText(this, "Removing required ingredient: "+ingredient.toString(), Toast.LENGTH_LONG);
+    private void toggleIngredientRequired(Ingredient ingredient){
+        String toastMessage;
+        if(ingredient.getRequired()){
+            toastMessage = "Removing required ingredient: ";
+            ingredient.setRequired(false);
+        } else {
+            toastMessage = "Making ingredient required: ";
+            ingredient.setRequired(true);
+        }
+        Toast toast = Toast.makeText(this, toastMessage+ingredient.toString(), Toast.LENGTH_LONG);
         toast.show();
-        ingredient.setRequired(false);
         mIngredientViewModel.update(ingredient);
-
-        availableIngredients.remove(ingredient);
+        updateLocalIngredientsFromDB();
         updateRecyclerViews();
     }
 
-
-
-    private void addRequiredIngredient(Ingredient ingredient){
-         Toast toast = Toast.makeText(this, "New required ingredient: "+ingredient.toString(), Toast.LENGTH_LONG);
-         toast.show();
-         ingredient.setRequired(true);
-         mIngredientViewModel.update(ingredient);
-
-         availableIngredients.remove(ingredient);
-         updateRecyclerViews();
+    private void toggleIngredientForbidden(Ingredient ingredient){
+        String toastMessage;
+        if(ingredient.getForbidden()){
+            toastMessage = "Making ingredient available: ";
+            ingredient.setForbidden(false);
+        } else {
+            toastMessage = "Making ingredient forbidden: ";
+            ingredient.setForbidden(true);
+        }
+        Toast toast = Toast.makeText(this, toastMessage+ingredient.toString(), Toast.LENGTH_LONG);
+        toast.show();
+        mIngredientViewModel.update(ingredient);
+        updateLocalIngredientsFromDB();
+        updateRecyclerViews();
     }
 
     private void  updateLocalIngredientsFromDB(){
-        mIngredientViewModel.getNotRequiredIngredients().observe(this, new Observer<List<Ingredient>>() {
+        mIngredientViewModel.getAvailableIngredients().observe(this, new Observer<List<Ingredient>>() {
             @Override
             public void onChanged(@Nullable final List<Ingredient> notRequiredIngredients) {
                 availableIngredients = notRequiredIngredients;
@@ -102,6 +129,13 @@ public class PickIngredientActivity extends AppCompatActivity {
                 updateRecyclerViews();
             }
         });
+        mIngredientViewModel.getForbiddenIngredients().observe(this, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable final List<Ingredient> forbIngredients) {
+                forbiddenIngredients = forbIngredients;
+                updateRecyclerViews();
+            }
+        });
     }
 
 
@@ -111,6 +145,9 @@ public class PickIngredientActivity extends AppCompatActivity {
         }
         if(requiredIngredients != null ){
             requiredIngredientsAdapter.setIngredients(requiredIngredients);
+        }
+        if(forbiddenIngredients != null ){
+            forbiddenIngredientsAdapter.setIngredients(forbiddenIngredients);
         }
     }
 }

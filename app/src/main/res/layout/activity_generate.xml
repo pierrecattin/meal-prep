@@ -56,10 +56,20 @@
         android:layout_margin="16dp"
         tools:listitem="@layout/recyclerview_item"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/forbiddenIngredientsRecyclerView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonAddRequiredIngredient"
         />
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/forbiddenIngredientsRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        tools:listitem="@layout/recyclerview_item"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/requiredIngredientsRecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/requiredIngredientsRecyclerView"
+        app:layout_constraintBottom_toBottomOf="@+id/requiredIngredientsRecyclerView"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

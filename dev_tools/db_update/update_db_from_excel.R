@@ -35,7 +35,8 @@ ingredients <-
          is_forbidden=0,
          id=1:nrow(ingredients)) 
 
-
+ingredients$is_forbidden[1:2] <- TRUE
+ingredients$is_required[3:4] <- TRUE
 dbExecute(conn, "DROP TABLE ingredients")
 # dbExecute(conn, "DROP TABLE temp")
 dbWriteTable(conn, name="temp", value=ingredients, overwrite=TRUE)

@@ -3,6 +3,7 @@ package com.pierrecattin.mealprep;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -21,16 +22,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
+public class GenerateActivity extends AppCompatActivity {
     private NumberPicker numberPickerMeals;
+
     private List<Ingredient> ingredients;
-    private List<Ingredient> requiredIngredients = new ArrayList<Ingredient>();
+    private List<Ingredient> requiredIngredients;
+    private List<Ingredient> forbiddenIngredients;
+
     private IngredientViewModel mIngredientViewModel;
-    private IngredientListAdapter requiredIngredientsAdapter;
 
     private RecyclerView requiredIngredientsRecyclerView;
+    private RecyclerView forbiddenIngredientsRecyclerView;
 
-    public static final String EXTRA_REQUIRED_INGREDIENT = "required_ingredient";
+    private IngredientListAdapter requiredIngredientsAdapter;
+    private IngredientListAdapter forbiddenIngredientsAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,26 +53,21 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
+
+        requiredIngredientsRecyclerView = findViewById(R.id.requiredIngredientsRecyclerView);
+        forbiddenIngredientsRecyclerView = findViewById(R.id.forbiddenIngredientsRecyclerView);
+        requiredIngredientsAdapter = new IngredientListAdapter(this);
+        forbiddenIngredientsAdapter = new IngredientListAdapter(this);
+
+
+        requiredIngredientsRecyclerView.setAdapter(requiredIngredientsAdapter);
+        forbiddenIngredientsRecyclerView.setAdapter(forbiddenIngredientsAdapter);
+
+        requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+        forbiddenIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
-        mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
-            @Override
-            public void onChanged(@Nullable final List<Ingredient> ingredients) {
-                // Update the cached copy of the ingredients
-                setIngredients(ingredients);
-            }
-        });
-
-        requiredIngredientsAdapter = new IngredientListAdapter(this);
-        requiredIngredientsRecyclerView = findViewById(R.id.requiredIngredientsRecyclerView);
-        mIngredientViewModel.getRequiredIngredients().observe(this, new Observer<List<Ingredient>>() {
-            @Override
-            public void onChanged(@Nullable final List<Ingredient> requiredIngredients) {
-                setRequiredIngredients(requiredIngredients);
-                updateRequiredIngredientsView();
-            }
-        });
+        updateLocalIngredientsFromDB();
 
         requiredIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
@@ -74,20 +75,28 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
                 removeRequiredIngredient(requiredIngredients.get(position));
             }
         });
+
+        forbiddenIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
+            @Override
+            public void onClick(int position) {
+                removeForbiddenIngredient(forbiddenIngredients.get(position));
+            }
+        });
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("numberPickerMealsValue",numberPickerMeals.getValue());
-        savedInstanceState.putSerializable("requiredIngredients",(Serializable)requiredIngredients);
     }
 
     public void generatePressed(View view) throws Exception {
         MealPlan plan = new MealPlan();
         List ingredientsAvailable = ingredients;
-        //ingredientsAvailable.remove(10);
+        if(forbiddenIngredients != null){
+            ingredientsAvailable.removeAll(forbiddenIngredients);
+        }
 
-        if(plan.makePlan(numberPickerMeals.getValue(), ingredients, requiredIngredients)){
+        if(plan.makePlan(numberPickerMeals.getValue(), ingredientsAvailable, requiredIngredients)){
             Intent intent = new Intent(this, MealplanActivity.class);
             intent.putExtra(MealplanActivity.EXTRA_PLAN, plan);
             intent.putExtra(MealplanActivity.EXTRA_INGREDIENTS, (Serializable) ingredientsAvailable);
@@ -107,32 +116,48 @@ public class GenerateActivity extends LifecycleLoggingAppCompatActivity  {
     }
 
 
-    public void setIngredients(List ingredients){
-        this.ingredients = ingredients;
-    }
-    public void setRequiredIngredients(List requiredIngredients){
-        if(requiredIngredients.size()>0){
-            this.requiredIngredients = requiredIngredients;
-        } else{
-            this.requiredIngredients.clear();
-        }
-    }
-
     private void removeRequiredIngredient(Ingredient ingredient){
-        this.requiredIngredients.remove(ingredient);
         ingredient.setRequired(false);
         mIngredientViewModel.update(ingredient);
-        updateRequiredIngredientsView();
+        updateLocalIngredientsFromDB();
     }
-    private void updateRequiredIngredientsView(){
-        requiredIngredientsAdapter.setIngredients(requiredIngredients);
-        requiredIngredientsRecyclerView.setAdapter(requiredIngredientsAdapter);
-        int RecyclerViewNbColumns;
-        if(requiredIngredients==null || requiredIngredients.size()<=1){
-            RecyclerViewNbColumns = 1;
-        } else{
-            RecyclerViewNbColumns = 2;
+    private void removeForbiddenIngredient(Ingredient ingredient){
+        ingredient.setForbidden(false);
+        mIngredientViewModel.update(ingredient);
+        updateLocalIngredientsFromDB();
+    }
+
+
+    private void  updateLocalIngredientsFromDB() {
+        mIngredientViewModel.getAllIngredients().observe(this, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable final List<Ingredient> ing) {
+                // Update the cached copy of the ingredients
+                ingredients = ing;
+            }
+        });
+
+        mIngredientViewModel.getRequiredIngredients().observe(this, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable final List<Ingredient> reqIngredients) {
+                requiredIngredients = reqIngredients;
+                updateRecyclerViews();
+            }
+        });
+        mIngredientViewModel.getForbiddenIngredients().observe(this, new Observer<List<Ingredient>>() {
+            @Override
+            public void onChanged(@Nullable final List<Ingredient> forbIngredients) {
+                forbiddenIngredients = forbIngredients;
+                updateRecyclerViews();
+            }
+        });
+    }
+    private void updateRecyclerViews(){
+        if(requiredIngredients != null ){
+            requiredIngredientsAdapter.setIngredients(requiredIngredients);
         }
-        requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, RecyclerViewNbColumns));
+        if(forbiddenIngredients != null ){
+            forbiddenIngredientsAdapter.setIngredients(forbiddenIngredients);
+        }
     }
 }

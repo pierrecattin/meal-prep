@@ -8,18 +8,29 @@
         layout="@layout/toolbar_main"
         android:id="@+id/toolbar"/>
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/requiredIngredientsRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/availableIngredientsRecyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:listitem="@layout/recyclerview_item" />
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/availableIngredientsRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/requiredIngredientsRecyclerView"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/requiredIngredientsRecyclerView"
+        app:layout_constraintEnd_toStartOf="@+id/forbiddenIngredientsRecyclerView"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:listitem="@layout/recyclerview_item" />
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/requiredIngredientsRecyclerView"
+        android:id="@+id/forbiddenIngredientsRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"

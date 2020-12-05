@@ -11,25 +11,31 @@ import java.util.List;
 public class IngredientViewModel extends AndroidViewModel {
     private IngredientRepository mRepository;
     private LiveData<List<Ingredient>> mAllIngredients;
+    private LiveData<List<Ingredient>> mAvailableIngredients; // not required and not forbidden
     private LiveData<List<Ingredient>> mRequiredIngredients;
-    private LiveData<List<Ingredient>> mNotRequiredIngredients;
+    private LiveData<List<Ingredient>> mForbiddenIngredients;
 
     public IngredientViewModel(Application application) {
         super(application);
         mRepository=new IngredientRepository(application);
         mAllIngredients=mRepository.getAllIngredients();
+        mAvailableIngredients=mRepository.getAvailableIngredients();
         mRequiredIngredients=mRepository.getRequiredIngredients();
-        mNotRequiredIngredients=mRepository.getNotRequiredIngredients();
+        mForbiddenIngredients=mRepository.getForbiddenIngredients();
     }
 
     LiveData<List<Ingredient>> getAllIngredients(){
         return mAllIngredients;
     }
+
+    LiveData<List<Ingredient>> getAvailableIngredients(){
+        return mAvailableIngredients;
+    }
     LiveData<List<Ingredient>> getRequiredIngredients(){
         return mRequiredIngredients;
     }
-    LiveData<List<Ingredient>> getNotRequiredIngredients(){
-        return mNotRequiredIngredients;
+    LiveData<List<Ingredient>> getForbiddenIngredients(){
+        return mForbiddenIngredients;
     }
 
     public void insert(Ingredient ingredient){

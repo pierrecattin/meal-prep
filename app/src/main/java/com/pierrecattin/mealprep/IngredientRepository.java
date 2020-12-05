@@ -10,24 +10,30 @@ import java.util.List;
 public class IngredientRepository {
     private IngredientDao mIngredientDao;
     private LiveData<List<Ingredient>> mAllIngredients;
+    private LiveData<List<Ingredient>> mAvailableIngredients; // not required and not forbidden
     private LiveData<List<Ingredient>> mRequiredIngredients;
-    private LiveData<List<Ingredient>> mNotRequiredIngredients;
+    private LiveData<List<Ingredient>> mForbiddenIngredients;
+
     IngredientRepository(Application application){
         IngredientRoomDatabase db = IngredientRoomDatabase.getDatabase(application);
         mIngredientDao = db.ingredientDao();
         mAllIngredients = mIngredientDao.getAllIngredients();
+        mAvailableIngredients = mIngredientDao.getByRequiredAndForbidden(false, false);
         mRequiredIngredients = mIngredientDao.getByRequired(true);
-        mNotRequiredIngredients = mIngredientDao.getByRequired(false);
+        mForbiddenIngredients = mIngredientDao.getByForbidden(true);
     }
 
     LiveData<List<Ingredient>>getAllIngredients(){
         return mAllIngredients;
     }
+    LiveData<List<Ingredient>>getAvailableIngredients(){
+        return mAvailableIngredients;
+    }
     LiveData<List<Ingredient>>getRequiredIngredients(){
         return mRequiredIngredients;
     }
-    LiveData<List<Ingredient>>getNotRequiredIngredients(){
-        return mNotRequiredIngredients;
+    LiveData<List<Ingredient>>getForbiddenIngredients(){
+        return mForbiddenIngredients;
     }
 
     public void insert (Ingredient ingredient){
