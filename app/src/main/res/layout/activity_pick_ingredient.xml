@@ -7,37 +7,69 @@
     <include
         layout="@layout/toolbar_main"
         android:id="@+id/toolbar"/>
+
+    <TextView
+        android:id="@+id/requiredTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/required_ingredients"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="225dp"
+        app:layout_constraintTop_toTopOf="@+id/availableTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/availableTextView"
+        app:layout_constraintStart_toStartOf="@+id/requiredIngredientsRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/requiredIngredientsRecyclerView"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/requiredIngredientsRecyclerView"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="500dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/availableIngredientsRecyclerView"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/requiredTextView"
         tools:listitem="@layout/recyclerview_item" />
+
+    <TextView
+        android:id="@+id/availableTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/available_ingredients"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="225dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/availableIngredientsRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/availableIngredientsRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/availableIngredientsRecyclerView"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/availableIngredientsRecyclerView"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="500dp"
         app:layout_constraintStart_toEndOf="@+id/requiredIngredientsRecyclerView"
         app:layout_constraintEnd_toStartOf="@+id/forbiddenIngredientsRecyclerView"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/availableTextView"
         tools:listitem="@layout/recyclerview_item" />
+
+    <TextView
+        android:id="@+id/forbiddenTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/excluded_ingredients"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="225dp"
+        app:layout_constraintTop_toTopOf="@+id/availableTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/availableTextView"
+        app:layout_constraintStart_toStartOf="@+id/forbiddenIngredientsRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/forbiddenIngredientsRecyclerView"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/forbiddenIngredientsRecyclerView"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="500dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/availableIngredientsRecyclerView"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/forbiddenTextView"
         tools:listitem="@layout/recyclerview_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

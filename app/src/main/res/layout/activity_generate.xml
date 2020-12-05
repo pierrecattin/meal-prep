@@ -46,24 +46,48 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/numberPickerMeals"
-        app:layout_constraintBottom_toTopOf="@+id/requiredIngredientsRecyclerView" />
+        app:layout_constraintBottom_toTopOf="@+id/requiredTextView" />
 
+    <TextView
+        android:id="@+id/requiredTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/required_ingredients"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="225dp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAddRequiredIngredient"
+        app:layout_constraintBottom_toTopOf="@+id/requiredIngredientsRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/requiredIngredientsRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/requiredIngredientsRecyclerView"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/requiredIngredientsRecyclerView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_margin="16dp"
-        tools:listitem="@layout/recyclerview_item"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/forbiddenIngredientsRecyclerView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAddRequiredIngredient"
+        app:layout_constraintTop_toBottomOf="@+id/requiredTextView"
+        tools:listitem="@layout/recyclerview_item" />
+
+    <TextView
+        android:id="@+id/forbiddenTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/excluded_ingredients"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="225dp"
+        app:layout_constraintTop_toTopOf="@+id/requiredTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/requiredTextView"
+        app:layout_constraintStart_toStartOf="@+id/forbiddenIngredientsRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/forbiddenIngredientsRecyclerView"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/forbiddenIngredientsRecyclerView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_margin="16dp"
         tools:listitem="@layout/recyclerview_item"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,5 +95,8 @@
         app:layout_constraintTop_toTopOf="@+id/requiredIngredientsRecyclerView"
         app:layout_constraintBottom_toBottomOf="@+id/requiredIngredientsRecyclerView"
         />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

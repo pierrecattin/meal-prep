@@ -8,4 +8,7 @@
     <string name="pick_ingredient">Pick Ingredient</string>
     <string name="action_share">Share</string>
     <string name="toast_generation_error">Cannot generate valid plan</string>
+    <string name="required_ingredients">Required</string>
+    <string name="excluded_ingredients">Excluded</string>
+    <string name="available_ingredients">Available</string>
 </resources>
