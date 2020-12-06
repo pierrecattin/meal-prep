@@ -43,6 +43,15 @@ public class IngredientRepository {
     public void update(Ingredient ingredient)  {
         new updateIngredientAsyncTask(mIngredientDao).execute(ingredient);
     }
+
+    public void resetRequired(){
+        new resetRequiredAsyncTask(mIngredientDao);
+    }
+
+    public void resetForbidden(){
+        new resetForbiddenAsyncTask(mIngredientDao);
+    }
+
     private static class insertAsyncTask extends AsyncTask<Ingredient, Void, Void> {
         private IngredientDao mAsyncTaskDao;
         insertAsyncTask(IngredientDao dao){
@@ -55,6 +64,35 @@ public class IngredientRepository {
             return null;
         }
     }
+
+    private static class resetRequiredAsyncTask extends AsyncTask<Void, Void, Void> {
+        private IngredientDao mAsyncTaskDao;
+
+        resetRequiredAsyncTask(IngredientDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.resetRequired();
+            return null;
+        }
+    }
+
+    private static class resetForbiddenAsyncTask extends AsyncTask<Void, Void, Void> {
+        private IngredientDao mAsyncTaskDao;
+
+        resetForbiddenAsyncTask(IngredientDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.resetForbidden();
+            return null;
+        }
+    }
+
 
     private static class updateIngredientAsyncTask extends AsyncTask<Ingredient, Void, Void> {
         private IngredientDao mAsyncTaskDao;

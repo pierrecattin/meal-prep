@@ -44,4 +44,12 @@ public class IngredientViewModel extends AndroidViewModel {
 
     public void update(Ingredient ingredient) {mRepository.update(ingredient);}
 
+    public void resetRequired(){
+        mRepository.resetRequired();
+    }
+
+    public void resetForbidden(){
+        mRepository.resetForbidden();
+    }
+
 }
