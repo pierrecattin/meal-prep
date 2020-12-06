@@ -40,6 +40,9 @@ public class GenerateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         numberPickerMeals = findViewById(R.id.numberPickerMeals);
         numberPickerMeals.setMaxValue(6);
         numberPickerMeals.setMinValue(1);
@@ -48,23 +51,28 @@ public class GenerateActivity extends AppCompatActivity {
             numberPickerMeals.setValue(savedInstanceState.getInt("numberPickerMealsValue"));
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setUpRecyclerViews();
 
+        mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
+        updateLocalIngredientsFromDB();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("numberPickerMealsValue",numberPickerMeals.getValue());
+    }
+
+    private void setUpRecyclerViews(){
         requiredIngredientsRecyclerView = findViewById(R.id.requiredIngredientsRecyclerView);
         forbiddenIngredientsRecyclerView = findViewById(R.id.forbiddenIngredientsRecyclerView);
         requiredIngredientsAdapter = new IngredientListAdapter(this);
         forbiddenIngredientsAdapter = new IngredientListAdapter(this);
-
 
         requiredIngredientsRecyclerView.setAdapter(requiredIngredientsAdapter);
         forbiddenIngredientsRecyclerView.setAdapter(forbiddenIngredientsAdapter);
 
         requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         forbiddenIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-
-        mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
-        updateLocalIngredientsFromDB();
 
         requiredIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
@@ -79,11 +87,7 @@ public class GenerateActivity extends AppCompatActivity {
                 removeForbiddenIngredient(forbiddenIngredientsAdapter.getIngredientAtPosition(position));
             }
         });
-    }
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt("numberPickerMealsValue",numberPickerMeals.getValue());
+
     }
 
     public void generatePressed(View view) throws Exception {
@@ -105,7 +109,6 @@ public class GenerateActivity extends AppCompatActivity {
             toast.show();
         }
     }
-
 
     public void manageIngredientsPressed(View view){
         Intent intent = new Intent(this, ManageIngredientsActivity.class);
