@@ -22,7 +22,7 @@
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/requiredIngredientsRecyclerView"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="500dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/availableIngredientsRecyclerView"
@@ -44,7 +44,7 @@
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/availableIngredientsRecyclerView"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="500dp"
         app:layout_constraintStart_toEndOf="@+id/requiredIngredientsRecyclerView"
         app:layout_constraintEnd_toStartOf="@+id/forbiddenIngredientsRecyclerView"
@@ -65,9 +65,8 @@
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/forbiddenIngredientsRecyclerView"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="500dp"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/availableIngredientsRecyclerView"
         app:layout_constraintTop_toBottomOf="@+id/forbiddenTextView"
