@@ -23,7 +23,7 @@
             android:parentActivityName=".GenerateActivity" />
         <activity
             android:name=".ManageIngredientsActivity"
-            android:label="@string/pick_ingredient"
+            android:label="@string/manage_ingredients"
             android:parentActivityName=".GenerateActivity"
             />
     </application>
