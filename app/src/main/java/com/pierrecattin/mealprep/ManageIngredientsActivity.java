@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -56,28 +57,7 @@ public class ManageIngredientsActivity extends AppCompatActivity {
 
         mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
         updateLocalIngredientsFromDB();
-
-        forbiddenIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
-            @Override
-            public void onClick(int position) {
-                toggleIngredientForbidden(forbiddenIngredientsAdapter.getIngredientAtPosition(position));
-            }
-        });
-
-        availableIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
-            @Override
-            public void onClick(int position) {
-                toggleIngredientForbidden(availableIngredientsAdapter.getIngredientAtPosition(position));
-            }
-        });
-
-        requiredIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
-            @Override
-            public void onClick(int position) {
-                toggleIngredientRequired(requiredIngredientsAdapter.getIngredientAtPosition(position));
-            }
-        });
-
+        attachTouchHelpers();
     }
 
 
@@ -103,7 +83,7 @@ public class ManageIngredientsActivity extends AppCompatActivity {
             toastMessage = "Making ingredient available: ";
             ingredient.setForbidden(false);
         } else {
-            toastMessage = "Making ingredient forbidden: ";
+            toastMessage = "Excluding ingredient: ";
             ingredient.setForbidden(true);
         }
         Toast toast = Toast.makeText(this, toastMessage+ingredient.toString(), Toast.LENGTH_LONG);
@@ -148,5 +128,71 @@ public class ManageIngredientsActivity extends AppCompatActivity {
         if(forbiddenIngredients != null ){
             forbiddenIngredientsAdapter.setIngredients(forbiddenIngredients);
         }
+    }
+
+    private void attachTouchHelpers(){
+        ItemTouchHelper requiredIngredientsTouchHelper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(0,
+                        ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView,
+                                          RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder,
+                                         int direction) {
+                        int position = viewHolder.getAdapterPosition();
+                        Ingredient myIngredient = requiredIngredientsAdapter.getIngredientAtPosition(position);
+                        toggleIngredientRequired(myIngredient);
+                    }
+                });
+
+        ItemTouchHelper forbiddenIngredientsTouchHelper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(0,
+                        ItemTouchHelper.LEFT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView,
+                                          RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder,
+                                         int direction) {
+                        int position = viewHolder.getAdapterPosition();
+                        Ingredient myIngredient = forbiddenIngredientsAdapter.getIngredientAtPosition(position);
+                        toggleIngredientForbidden(myIngredient);
+                    }
+                });
+        ItemTouchHelper availableIngredientsTouchHelper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(0,
+                        ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView,
+                                          RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder,
+                                         int direction) {
+                        int position = viewHolder.getAdapterPosition();
+                        Ingredient myIngredient = availableIngredientsAdapter.getIngredientAtPosition(position);
+                        if(direction==ItemTouchHelper.LEFT){
+                            toggleIngredientRequired(myIngredient);
+                        } else if(direction == ItemTouchHelper.RIGHT){
+                            toggleIngredientForbidden(myIngredient);
+                        }
+                    }
+                });
+
+        requiredIngredientsTouchHelper.attachToRecyclerView(requiredIngredientsRecyclerView);
+        forbiddenIngredientsTouchHelper.attachToRecyclerView(forbiddenIngredientsRecyclerView);
+        availableIngredientsTouchHelper.attachToRecyclerView(availableIngredientsRecyclerView);
     }
 }
