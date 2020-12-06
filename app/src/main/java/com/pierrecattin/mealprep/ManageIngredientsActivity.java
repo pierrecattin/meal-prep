@@ -73,8 +73,6 @@ public class ManageIngredientsActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(this, toastMessage+ingredient.toString(), Toast.LENGTH_LONG);
         toast.show();
         mIngredientViewModel.update(ingredient);
-        updateLocalIngredientsFromDB();
-        updateRecyclerViews();
     }
 
     private void toggleIngredientForbidden(Ingredient ingredient){
@@ -89,8 +87,6 @@ public class ManageIngredientsActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(this, toastMessage+ingredient.toString(), Toast.LENGTH_LONG);
         toast.show();
         mIngredientViewModel.update(ingredient);
-        updateLocalIngredientsFromDB();
-        updateRecyclerViews();
     }
 
     private void  updateLocalIngredientsFromDB(){
