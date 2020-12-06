@@ -40,6 +40,14 @@ public class ManageIngredientsActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        setUpRecyclerViews();
+
+        mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
+        updateLocalIngredientsFromDB();
+        attachTouchHelpers();
+    }
+
+    private void setUpRecyclerViews(){
         availableIngredientsRecyclerView = findViewById(R.id.availableIngredientsRecyclerView);
         requiredIngredientsRecyclerView = findViewById(R.id.requiredIngredientsRecyclerView);
         forbiddenIngredientsRecyclerView = findViewById(R.id.forbiddenIngredientsRecyclerView);
@@ -54,12 +62,7 @@ public class ManageIngredientsActivity extends AppCompatActivity {
         availableIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         requiredIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         forbiddenIngredientsRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-
-        mIngredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
-        updateLocalIngredientsFromDB();
-        attachTouchHelpers();
     }
-
 
     private void toggleIngredientRequired(Ingredient ingredient){
         String toastMessage;
