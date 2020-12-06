@@ -60,21 +60,21 @@ public class ManageIngredientsActivity extends AppCompatActivity {
         forbiddenIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                toggleIngredientForbidden(forbiddenIngredients.get(position));
+                toggleIngredientForbidden(forbiddenIngredientsAdapter.getIngredientAtPosition(position));
             }
         });
 
         availableIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                toggleIngredientForbidden(availableIngredients.get(position));
+                toggleIngredientForbidden(availableIngredientsAdapter.getIngredientAtPosition(position));
             }
         });
 
         requiredIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                toggleIngredientRequired(requiredIngredients.get(position));
+                toggleIngredientRequired(requiredIngredientsAdapter.getIngredientAtPosition(position));
             }
         });
 

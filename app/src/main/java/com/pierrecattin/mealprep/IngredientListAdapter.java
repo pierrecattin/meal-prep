@@ -56,19 +56,6 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
         notifyDataSetChanged();
     }
 
-
-    void addIngredient(Ingredient ingredient){
-        if(ingredients == null){
-            List ingredientList = new ArrayList();
-            ingredientList.add(ingredient);
-            setIngredients(ingredientList);
-        } else {
-            ingredients.add(ingredient);
-            sortIngredients();
-            notifyDataSetChanged();
-        }
-    }
-
     private void sortIngredients(){
         Collections.sort(ingredients);
     }
@@ -95,6 +82,9 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
     }
     public void setListener(Listener listener){
         this.listener = listener;
+    }
+    public Ingredient getIngredientAtPosition (int position) {
+        return ingredients.get(position);
     }
 
 }

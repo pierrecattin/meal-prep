@@ -69,14 +69,14 @@ public class GenerateActivity extends AppCompatActivity {
         requiredIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                removeRequiredIngredient(requiredIngredients.get(position));
+                removeRequiredIngredient(requiredIngredientsAdapter.getIngredientAtPosition(position));
             }
         });
 
         forbiddenIngredientsAdapter.setListener(new IngredientListAdapter.Listener() {
             @Override
             public void onClick(int position) {
-                removeForbiddenIngredient(forbiddenIngredients.get(position));
+                removeForbiddenIngredient(forbiddenIngredientsAdapter.getIngredientAtPosition(position));
             }
         });
     }
